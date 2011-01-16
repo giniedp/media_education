@@ -1,0 +1,64 @@
+% Copyright 2009 Dominik Wagenfuehr <dominik.wagenfuehr@deesaster.org>
+% Dieses Dokument unterliegt der Creative-Commons-Lizenz
+% "Namensnennung-Weitergabe unter gleichen Bedingungen 3.0 Deutschland"
+% [http://creativecommons.org/licenses/by-sa/3.0/de/].
+
+ % use rounded buttons and menus
+\useinnertheme[shadow=true]{rounded}
+      
+% use left sidebar, hide other subsections in sidebar
+\useoutertheme[left,hideothersubsections,height=12mm]{sidebar}
+
+% width of sidebar
+%\setbeamersize{sidebar width left=2.1cm}
+% Bug: Size of "section in sidebar" does not change!
+
+% Footline
+\setbeamertemplate{footline}
+{%
+  \begin{beamercolorbox}{sidebar}
+    \vskip3pt%
+    \hskip8pt{}Seite \insertframenumber{}/{}\inserttotalframenumber{}%
+    \hspace*{\fill}\href{http://creativecommons.org/licenses/by-sa/3.0/de/}{\includegraphics[height=6px]{Bilder/cc-by-sa.pdf}}\hspace*{5pt}\vskip-1pt
+    \vskip2pt
+  \end{beamercolorbox}%
+}
+
+% do not use navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% opaque preview of further text on sheet
+\setbeamercovered{transparent}
+
+% sidebar color
+\setbeamercolor*{sidebar}{fg=black,bg=hellgrau}
+\setbeamercolor*{palette sidebar tertiary}{fg=dunkelgrau}
+\setbeamercolor*{palette sidebar quaternary}{fg=black}
+\setbeamercolor*{section in sidebar}{fg=white,bg=orange}
+\setbeamercolor*{section in sidebar shaded}{fg=black}
+\setbeamercolor*{subsection in sidebar}{fg=white,bg=orange}
+\setbeamercolor*{subsection in sidebar shaded}{fg=black}
+
+% frame and title color
+\setbeamercolor*{frametitle}{fg=white,bg=orange}
+\setbeamercolor*{titlelike}{fg=white,bg=orange}
+\setbeamerfont{frametitle}{series=\bfseries}
+
+% TOC color
+\setbeamercolor*{section in toc}{fg=orange}
+
+% text color
+\setbeamercolor{normal text}{fg=black}
+
+% Navigation symbols color
+\setbeamercolor*{navigation symbols}{fg=mittelgrau}
+
+% item color
+\setbeamercolor{item}{fg=orange}
+\setbeamercolor*{itemize item}{fg=black}
+
+% Aussehen von Fußnoten (wird eh nur für URLs genutzt)
+\renewcommand{\thefootnote}{{\tiny [\arabic{footnote}]}}
+
+% Zeileabstand "böse" ändern
+\renewcommand{\baselinestretch}{1.2}

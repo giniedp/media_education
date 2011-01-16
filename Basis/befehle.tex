@@ -1,0 +1,83 @@
+% Copyright 2009 Dominik Wagenfuehr <dominik.wagenfuehr@deesaster.org>
+% Dieses Dokument unterliegt der Creative-Commons-Lizenz
+% "Namensnennung-Weitergabe unter gleichen Bedingungen 3.0 Deutschland"
+% [http://creativecommons.org/licenses/by-sa/3.0/de/].
+
+% some color definition
+\definecolor{orange}{rgb}{1,0.39,0.04}
+\definecolor{dunkelgrau}{gray}{0.35}
+\definecolor{mittelgrau}{gray}{0.85}
+\definecolor{hellgrau}{gray}{0.93}
+\definecolor{hellgelb}{rgb}{1.0,1.0,0.9}
+
+\newcommand{\ListingBox}[1]
+{%
+    \begin{small}
+        \begin{semiverbatim}
+            \fcolorbox{dunkelgrau}{hellgelb}{%
+                \begin{minipage}{0.95\linewidth}
+                    #1
+                \end{minipage}
+            }
+        \end{semiverbatim}
+    \end{small}
+}
+
+\newcommand{\CommandBox}[1]
+{%
+    \begin{small}
+        \begin{semiverbatim}
+        \fcolorbox{dunkelgrau}{hellgrau}{%
+            \begin{minipage}{0.95\linewidth}
+                #1
+            \end{minipage}
+        }
+        \end{semiverbatim}
+    \end{small}
+}
+
+% URL als Fußnote
+\newcommand*{\fnurl}[1]{{\footnote{{\tiny \url{#1}}}}}
+
+% Kürzel für \textbackslash
+\newcommand*{\bs}{\textbackslash}
+
+% Definition um bei Boxen eine ganze Zeilenhöhe auszufüllen
+\newcommand*{\fullh}{\vphantom{\textsuperscript{I}y}}
+
+% Makro für Tasten
+\newcommand*{\Taste}[1]{\fboxsep1pt\fbox{\fullh{}#1}}
+
+% Makro für Tabeinrückung
+\newcommand*{\tab}{\mbox{~~~~}}
+
+% Setzt Farbe
+\newcommand<>{\colors}[1]{\only<beamer>{\color#2{#1}}}
+
+% Makro für Mischung aus uncover und color
+\newcommand<>{\uncovcol}[3][]{%
+    \uncover#4{%
+        {%
+            \ifthenelse{\equal{#1}{}}{\colors#4{#2}}{\colors#1{#2}}%
+            #3%
+        }%
+    }%
+}
+
+% Einheitliche Beispieldatei
+\newcommand*{\BspDatei}[1]{Beispiel \texttt{#1}}
+
+% Anzeige der Beispiele als PDF
+% Benutzung: \ShowExample[TRIM]{FRAMETITEL}{PDFBILD_OHNE_ENDUNG}
+\newcommand{\ShowExample}[3][0 450 0 0]
+{%
+    \only<handout>{%
+        \begin{frame}
+            \frametitle{#2}
+            \begin{center}
+                \fbox{\includegraphics[clip,trim=#1,height=0.82\textheight]{Bilder/#3.pdf}}\\
+                \textit{Abbildung: #3.pdf}
+            \end{center}
+        \end{frame}
+    }
+}
