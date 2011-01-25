@@ -4,3 +4,4 @@
 *.aux
 *.nav
 *.out
+.DS_Store
