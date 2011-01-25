@@ -1,0 +1,37 @@
+\usepackage[utf8]{inputenc}
+\usepackage[ngermanb]{babel}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{lmodern}
+\usepackage{pstricks}
+\usepackage{pst-pdf}
+
+\newcommand{\wobinich}[2]{
+		\subsubsection*{Wo bin Ich:}
+		\begin{itemize}
+			\item[] Wo bin ich:
+			\item[] #1
+			\item[] #2
+		\end{itemize}}
+
+\newenvironment{navigation}{
+		\subsubsection*{Navigation:}
+		\begin{itemize}
+	}{\end{itemize}}
+\newcommand{\navitem}[1]{\item #1}
+
+\newenvironment{textbereich}{
+		\subsubsection*{Textbereich:}
+	}{}
+
+\newenvironment{statistikbereich}{
+		\subsubsection*{Statistikbereich:}
+	}{}
+
+\newenvironment{inhaltsbereich}{
+		\subsubsection*{Inhaltsbereich:}
+	}{}
+
+\newenvironment{aufgabenbereich}{
+		\subsubsection*{Aufgabenbereich:}
+	}{}
+

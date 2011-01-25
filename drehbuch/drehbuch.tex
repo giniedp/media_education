@@ -1,0 +1,45 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage{drehbuch}
+\usepackage{pdfpages}
+
+\title{Modul - Vokabeltrainer}
+\author{Hauke Schade\\Alexander Gräfenstein}
+\date{\today}
+
+
+%\modulhauptseite{Modultitel}
+\newcommand{\modulhauptseite}[1]{
+		\subsubsection{Modulhauptseite}
+		\wobinich{#1}{Modulhauptseite}
+		\begin{navigation}
+			\navitem{Lernen}
+			\navitem{Üben}
+		\end{navigation}
+	}
+
+%\modullernseite}{Modultitel}{Seitentitel}
+\newcommand{\modullernseite}[2]{
+		\subsubsection{Modullernseite}
+		\wobinich{#1}{Lernen - #2}
+	}
+
+%\modultestseite}{Modultitel}{Seitentitel}
+\newcommand{\modultestseite}[2]{
+		\subsubsection{Modultestseite}
+		\wobinich{#1}{Üben - #2}
+	}
+
+
+\begin{document}
+
+	\maketitle
+	\newpage
+
+	\section{Struktur}
+	... hier such ich noch raus, wie man andere pdf-dateien einbindet...
+
+	\section{Modul-Drehbuch}
+	\include{module-vocabulary}
+
+
+\end{document}
