@@ -1,0 +1,30 @@
+\documentclass[
+	12pt,
+	a4paper,
+	pdftex,
+	oneside,
+	ngerman,
+	BCOR10mm,
+	liststotoc,			
+    bibtotoc
+]{scrbook}
+
+% eigene LaTeX-Befehle kommen in diese Datei
+\usepackage{style}
+
+\title{ Drehbuch für das Prjoekt Schultrainer }
+\author{ Hauke Schade, Alexander Gräfenstein}
+\date{\today}
+
+\begin{document}
+
+  \tableofcontents% Inhaltsverzeichnis
+	\include{part-structure}	% Hauptdokument
+	\include{part-script}
+  %\include{part-module-vocabulary}
+  \include{part-module-mathematic}
+  
+	\include{appendix/appendix}
+	\listoffigures
+
+\end{document}

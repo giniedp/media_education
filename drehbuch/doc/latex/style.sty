@@ -1,0 +1,60 @@
+\usepackage{acronym}          % Verwendung von Akronymen
+\usepackage{amsmath}          % Mathematik
+\usepackage{amsfonts}         % Mathematik
+\usepackage{array}            % Tabellen
+\usepackage{float}            % mehr Positionen von Float-Umgebungen
+\usepackage[T1]{fontenc}      % Fonteinstellung
+\usepackage{graphicx}         % Laden von Bildern
+\usepackage{hyperref}         % Querreferenzen und Links
+\usepackage[utf8]{inputenc}   % Zeichenkodierung
+\usepackage{lscape}           % Landscape 
+\usepackage{makeidx}          % Indexerstellung
+\usepackage{mflogo}           % LaTeX-Logos
+\usepackage{multicol}         % mehrspaltiger Satz
+\usepackage{ngerman}          % Zur Verwendung der deutschen Sprache
+\usepackage{rotating}         % Rotieren von Bildern und Texten
+\usepackage{typearea}         % Satzspiegelberechnung
+\usepackage{url}              % Hyperlinks
+\usepackage{xspace}           % Korrekter Leerraum nach Befehlen
+\usepackage{textcomp}         % Verschiedene Zeichen im textmode
+\usepackage{xcolor}
+\usepackage{courier}
+\usepackage{lmodern}		      % Skalierbare Schrift
+\usepackage{bibgerm}		      %
+\usepackage{natbib}		  	    %
+
+\usepackage[rflt]{floatflt}	  % Bilder im Fließtext
+\usepackage{color}		  	    % 
+\usepackage{colortbl}		      % 
+\usepackage{tabularx}		      %
+
+\include{hyphenation.tex}
+\linespread{1.2}
+\graphicspath{{images/}}
+\setcounter{tocdepth}{2}
+\setlength{\emergencystretch}{1em}
+
+
+
+
+%\modulhauptseite{Modultitel}
+\newcommand{\modulhauptseite}[1]{
+		\subsubsection{Modulhauptseite}
+		\wobinich{#1}{Modulhauptseite}
+		\begin{navigation}
+			\navitem{Lernen}
+			\navitem{Üben}
+		\end{navigation}
+	}
+
+%\modullernseite}{Modultitel}{Seitentitel}
+\newcommand{\modullernseite}[2]{
+		\subsubsection{Modullernseite}
+		\wobinich{#1}{Lernen - #2}
+	}
+
+%\modultestseite}{Modultitel}{Seitentitel}
+\newcommand{\modultestseite}[2]{
+		\subsubsection{Modultestseite}
+		\wobinich{#1}{Üben - #2}
+	}
