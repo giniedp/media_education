@@ -31,12 +31,14 @@
 \include{hyphenation.tex}
 \linespread{1.2}
 \graphicspath{{images/}}
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{3}
 \setlength{\emergencystretch}{1em}
 
+\newcommand{\prettyref}[1]{
+  \ref{#1} S.\pageref{#1}
+}
 
-
-
+%
 %\modulhauptseite{Modultitel}
 \newcommand{\modulhauptseite}[1]{
 		\subsubsection{Modulhauptseite}
