@@ -5,4 +5,5 @@
 *.nav
 *.out
 *.lof
+*.properties.xml
 .DS_Store

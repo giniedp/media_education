@@ -7,6 +7,8 @@
 \usepackage{graphicx}         % Laden von Bildern
 \usepackage{hyperref}         % Querreferenzen und Links
 \usepackage[utf8]{inputenc}   % Zeichenkodierung
+\usepackage[ngerman]{babel}
+\usepackage[babel,german=quotes]{csquotes}	%german quotes
 \usepackage{lscape}           % Landscape 
 \usepackage{makeidx}          % Indexerstellung
 \usepackage{mflogo}           % LaTeX-Logos
@@ -38,25 +40,3 @@
   \ref{#1} S.\pageref{#1}
 }
 
-%
-%\modulhauptseite{Modultitel}
-\newcommand{\modulhauptseite}[1]{
-		\subsubsection{Modulhauptseite}
-		\wobinich{#1}{Modulhauptseite}
-		\begin{navigation}
-			\navitem{Lernen}
-			\navitem{Üben}
-		\end{navigation}
-	}
-
-%\modullernseite}{Modultitel}{Seitentitel}
-\newcommand{\modullernseite}[2]{
-		\subsubsection{Modullernseite}
-		\wobinich{#1}{Lernen - #2}
-	}
-
-%\modultestseite}{Modultitel}{Seitentitel}
-\newcommand{\modultestseite}[2]{
-		\subsubsection{Modultestseite}
-		\wobinich{#1}{Üben - #2}
-	}

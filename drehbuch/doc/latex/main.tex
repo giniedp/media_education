@@ -3,10 +3,10 @@
 	a4paper,
 	pdftex,
 	oneside,
-	ngerman,
+%	ngerman,
 	BCOR10mm,
-	liststotoc,			
-    bibtotoc
+	liststotoc,
+	bibtotoc
 ]{scrbook}
 
 % eigene LaTeX-Befehle kommen in diese Datei
@@ -20,12 +20,12 @@
 \begin{document}
 	\maketitle
 
-  \tableofcontents% Inhaltsverzeichnis
+	\tableofcontents%	Inhaltsverzeichnis
 	\include{part-structure}	% Hauptdokument
-  %\include{part-module-vocabulary}
-  \include{part-module-mathematic}
-  
-	\include{appendix/appendix}
+	\include{part-module-vocabulary}	%Vokabeltrainer
+	\include{part-module-mathematic}	%Vedische Mathematik
+
+	\include{appendix/appendix}	%Anhang
 	\listoffigures
 
 \end{document}
