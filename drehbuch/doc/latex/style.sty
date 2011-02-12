@@ -24,6 +24,7 @@
 \usepackage{lmodern}		      % Skalierbare Schrift
 \usepackage{bibgerm}		      %
 \usepackage{natbib}		  	    %
+\usepackage{nameref}
 
 %\usepackage[rflt]{floatflt}	  % Bilder im Fließtext %finde kein floatflt ...
 \usepackage{color}		  	    % 
@@ -37,6 +38,6 @@
 \setlength{\emergencystretch}{1em}
 
 \newcommand{\prettyref}[1]{
-  \ref{#1} S.\pageref{#1}
+  \nameref{#1} \begin{tiny}(\ref{#1} S.\pageref{#1})\end{tiny}
 }
 
