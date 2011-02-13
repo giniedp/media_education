@@ -10,8 +10,8 @@
 	\item[Wo bin ich] \emph{\\Du bist hier:\\Vokabeltrainer - Englisch\\Modul-Hauptseite}
 	\item[Navigation] Links zu den ersten Lern- und Übungsseiten
 	\begin{description}
-		\item[Lernen] Link zur ersten Lernseite \prettyref{has:voc-learn-page0}
-		\item[Üben] Link zur ersten Trainingsseite \prettyref{has:voc-practice-page0}
+		\item[Lernen] \prettyref{has:voc-learn-page0}
+		\item[Üben] \prettyref{has:voc-practice-page0}
 	\end{description}
 	\item[Hilfe] keine
 \end{description}
@@ -24,7 +24,7 @@
 	\item Jede \texttt{Lernseite} ist mit einer \texttt{Übung} verknüpft.
 	\item Es gibt keine \texttt{Hilfetext}e.
 	\item Jede Lernseite zeigt die Vokabeln der \texttt{Datenbank} alphabetisch an.
-	\item Über eine Filter-Einstellung  lassen sich optional nur entsprechende Teilmengen anzeigen, beziehungsweise schon gelernte Vokabeln ausblenden. \\
+	\item Über eine Filter-Einstellung lassen sich optional nur entsprechende Teilmengen anzeigen bzw. schon gelernte Vokabeln ausblenden. \\
 		($\{1, 2, \ldots, 5, \text{gar Keine}\}$)
 \end{itemize}
 
@@ -32,11 +32,11 @@
 \label{has:voc-learn-page0}
 \begin{description}
 	\item[Titel] \emph{ Lernen - Hauptseite }
-	\item[Textbereich] \texttt{ vocabulary/learn/index.html }
+	\item[Textbereich] \texttt{vocabulary/learn/index.html}
 	\item[Wo bin ich] \emph{\\Du bist hier:\\Vokabeltrainer - Englisch\\Lernen Hauptseite}
 	\item[Hilfe] keine
 	\item[Überseite] keine
-	\item[Unterseiten]
+	\item[Unterseiten] :
 	\begin{itemize}
 		\item \prettyref{has:voc-learn-page1}
 		\item \prettyref{has:voc-learn-page2}
@@ -109,11 +109,11 @@
 %\label{has:voc-practice-structure}
 \begin{itemize}
 	\item Jede Übung ist mit einer \texttt{Lernseite} verknüpft.
-	\item Es gibt keine \texttt{Hilfetext}e.
+	\item Es gibt keine \texttt{Hilfetexte}.
 	\item Jede Übung besteht aus einer Reihe von Aufgaben (üblicherweise 20).
 	\item Eine Aufgabe besteht aus dem zu übersetzenden Wort und einem Eingabefeld, in dem die gesuchte Übersetzung eingetragen werden muss.
-	\item Die zu übersetzenden Vokabeln werden durch die \texttt{Datenbank} definiert.\\
-		Jede Vokabel hat dabei einen internen \texttt{Zähler}, welcher bei richtig raten $+1$ und bei falsch raten $=0$ gesetzt wird.\\
+	\item Die zu übersetzenden Vokabeln werden durch die \texttt{Datenbank} definiert.
+		Jede Vokabel hat dabei einen internen \texttt{Zähler}, welcher bei richtiger Antwort $+1$ und bei falscher Antwort $=0$ gesetzt wird.
 		Für die Aufgaben einer Übung werden jeweils zufällige Variablen mit \texttt{Zähler} $<5$ gewählt (Stichwort: 5-Fächer-Lernen).
 
 \end{itemize}
@@ -121,7 +121,7 @@
 Die Antwort wird durch eine der Tasten \texttt{TAB} oder \texttt{ENTER} bestätigt. 
 Die Antwort wird sofort nach Bestätigung durch das Programm geprüft. 
 Neben dem Eingabefeld erscheint ein \emph{richtig} oder \emph{falsch} Icon (\texttt{icons/success.png, icons/fail.png}), ein Zähler wird je nach Korrektheit hochgezählt und bei falscher Antwort erscheint zusätzlich die Musterlösung.
-Zeitgleich wird die nächste Aufgabe aufgedeckt, alle bisherigen Aufgaben werde nach oben verschoben und ihr Alpha-Wert wird jeweils um $\frac 1 3$ herabgesetzt.
+Zeitgleich wird die nächste Aufgabe aufgedeckt, alle bisherigen Aufgaben werde nach oben verschoben und ihr Alpha-Wert wird jeweils um 1/3 herabgesetzt.
 So sind jeweils die letzten paar Aufgaben sichtbar.
 
 \subsection{ Üben - Hauptseite }
@@ -132,7 +132,7 @@ So sind jeweils die letzten paar Aufgaben sichtbar.
 	\item[Wo bin ich] \emph{\\Du bist hier:\\Vokabeltrainer - Englisch\\Üben Hauptseite}
 	\item[Hilfe] keine
 	\item[Überseite] keine
-	\item[Unterseiten]
+	\item[Unterseiten] :
 	\begin{itemize}
 		\item \prettyref{has:voc-practice-page1}
 		\item \prettyref{has:voc-practice-page2}
