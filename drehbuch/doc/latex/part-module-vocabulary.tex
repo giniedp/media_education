@@ -16,13 +16,26 @@
 	\item[Hilfe] keine
 \end{description}
 
+\section{ Statistik }
+\label{has:voc-module-stats}
+\begin{wrapfigure}{r}{0.45\textwidth}
+	\includegraphics[width=0.4\textwidth]{voc-stats.png}
+\end{wrapfigure}
+In der Statistik wird ein Prozentsatz-Wert gegen das Datum aufgetragen, dabei wird das Datum logarithmisch im Alter skaliert.
+
+Pauschal wird es zwei Einträge geben:
+\begin{description}
+	\item[grau] Prozentsatz der richtigen Antworten in der jeweiligen Übung.
+	\item[schwarz] Prozentsatz der gelernten Vokabeln im Zusammenhang zum gesamten Wortschatz. Allerdings produziert jeder Wortschatz eine eigene Linie. Dies ist somit eine Art globaler Fortschrittsbalken.
+\end{description}
+
 
 \section{ Lernseiten }
 \label{has:voc-learn}
 
 \begin{itemize}
 	\item Jede \texttt{Lernseite} ist mit einer \texttt{Übung} verknüpft.
-	\item Es gibt keine \texttt{Hilfetext}e.
+	\item Es gibt keine \texttt{Hilfetexte}.
 	\item Jede Lernseite zeigt die Vokabeln der \texttt{Datenbank} alphabetisch an.
 	\item Über eine Filter-Einstellung lassen sich optional nur entsprechende Teilmengen anzeigen bzw. schon gelernte Vokabeln ausblenden. \\
 		($\{1, 2, \ldots, 5, \text{gar Keine}\}$)
