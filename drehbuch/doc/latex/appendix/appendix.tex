@@ -3,14 +3,16 @@
 \setcounter{subsection}{0}
 \renewcommand*\thesection{\Alph{section}}
 
-\chapter{Anhang}
-\section{Navigationsstruktur}
+%\chapter{Anhang}
+%\section{Navigationsstruktur}
 
-\includepdf[pages={1-2}]{navigation.pdf}
+\includepdf[scale=0.8,pages={1},pagecommand=\chapter{Anhang}\section{Navigationsstruktur}]{navigation.pdf}
+\includepdf[scale=0.8,pages={2}]{navigation.pdf}
 
-\section{Layout}
+%\section{Layout}
 
-\includepdf[pages={1-7}]{struktur.pdf}
+\includepdf[scale=0.8,pages={1},pagecommand=\section{Layout}]{struktur.pdf}
+\includepdf[scale=0.8,pages={2-7}]{struktur.pdf}
 
 
 \section{Modul Mathematik}
@@ -39,5 +41,4 @@
   \texttt{mathematics/learn/page5.html  } & Division durch 9 \\
 \end{tabular}
 
-\subsection{Layout}
-\includepdf[pages={1}]{math-practise-page.pdf}
+\includepdf[scale=0.8,pages={1},pagecommand=\subsection{Layout}]{math-practise-page.pdf}
