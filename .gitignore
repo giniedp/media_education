@@ -8,4 +8,5 @@
 drehbuch/doc/latex/main.pdf
 *.lof
 *.properties.xml
+*.orig
 .DS_Store
