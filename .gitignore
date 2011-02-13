@@ -4,4 +4,6 @@
 *.aux
 *.nav
 *.out
+*.lof
+drehbuch/doc/latex/main.pdf
 .DS_Store
