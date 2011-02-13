@@ -6,4 +6,6 @@
 *.out
 *.lof
 drehbuch/doc/latex/main.pdf
+*.lof
+*.properties.xml
 .DS_Store

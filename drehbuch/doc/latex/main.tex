@@ -3,27 +3,29 @@
 	a4paper,
 	pdftex,
 	oneside,
-	ngerman,
+%	ngerman,
 	BCOR10mm,
-	liststotoc,			
-    bibtotoc
+	liststotoc,
+	bibtotoc
 ]{scrbook}
 
 % eigene LaTeX-Befehle kommen in diese Datei
 \usepackage{style}
 
-\title{ Drehbuch für das Prjoekt Schultrainer }
-\author{ Hauke Schade, Alexander Gräfenstein}
+\title{ Drehbuch fÃ¼r das Projekt Schultrainer }
+%\subtitle{ \includegraphics[width=\textwidth]{draft.png} }
+\author{ Hauke Schade, Alexander GrÃ¤fenstein}
 \date{\today}
 
 \begin{document}
+	\maketitle
 
-  \tableofcontents% Inhaltsverzeichnis
+	\tableofcontents%	Inhaltsverzeichnis
 	\include{part-structure}	% Hauptdokument
-  %\include{part-module-vocabulary}
-  \include{part-module-mathematic}
-  
-	\include{appendix/appendix}
+	\include{part-module-vocabulary}	%Vokabeltrainer
+	\include{part-module-mathematic}	%Vedische Mathematik
+
+	\include{appendix/appendix}	%Anhang
 	\listoffigures
 
 \end{document}

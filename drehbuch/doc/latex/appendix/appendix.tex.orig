@@ -6,8 +6,14 @@
 \chapter{Anhang}
 \section{Seitennavigation und Layout}
 
+<<<<<<< HEAD
+\includepdf[pages=-]{struktur.pdf}
+
+\begin{figure}[!h]
+=======
 
 \begin{figure}[!ht]
+>>>>>>> 8a1fbc02f8007e6ed31904135157676251ef80cb
   \centering
   \includegraphics[width=0.6\textwidth]{struktur}\\
   \caption{Seitenlayout}

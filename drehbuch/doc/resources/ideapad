@@ -1,0 +1,41 @@
+http://www.vokabel.org/
+
+http://www.vokabeln.de/v6/download-englisch.htm <-- vc4 dateien ... binär format .. bissle googlen ...
+
+http://www.vocabee.de/ <-- schickes design
+
+Resourcen die zu definieren sind:
+
+layout/module-page-icon.png
+layout/main-page-icon.png
+layout/login-icon.png
+layout/profile-icon.png
+layout/help-icon.png
+layout/learn-icon.png
+layout/practise-icon.png
+layout/success-icon.png
+layout/fail-icon.png
+layout/index.html
+
+mathematics/index.html
+
+mathematics/learn/index.html
+mathematics/learn/page1.html
+mathematics/learn/page2.html
+mathematics/learn/page2a.html
+mathematics/learn/page2b.html
+mathematics/learn/page2c.html
+mathematics/learn/page2d.html
+mathematics/learn/page3.html
+mathematics/learn/page4.html
+mathematics/learn/page5.html
+
+mathematics/practise/index.html
+mathematics/practise/page1.html
+mathematics/practise/page2a.html
+mathematics/practise/page2b.html
+mathematics/practise/page2c.html
+mathematics/practise/page2d.html
+mathematics/practise/page3.html
+mathematics/practise/page4.html
+mathematics/practise/page5.html
