@@ -1,0 +1,65 @@
+// Set round corners
+@mixin corners {
+  border-radius: $default_border-radius;
+  -moz-border-radius: $default_border-radius;
+  -webkit-border-radius: $default_border-radius;
+}
+
+@mixin corners_top_left {
+  -moz-border-radius-topleft: $default_border-radius; 
+  -webkit-border-top-left-radius: $default_border-radius; 
+  border-top-left-radius: $default_border-radius;
+}
+
+@mixin corners_top_right {
+  -moz-border-radius-topright: $default_border-radius; 
+  -webkit-border-top-right-radius: $default_border-radius; 
+  border-top-right-radius: $default_border-radius;
+}
+
+@mixin corners_top {
+  @include corners_top_left;
+  @include corners_top_right;
+}
+
+@mixin corners_bottom_left {
+  -moz-border-radius-bottomleft: $default_border-radius; 
+  -webkit-border-bottom-left-radius: $default_border-radius; 
+  border-bottom-left-radius: $default_border-radius;
+}
+
+@mixin corners_bottom_right {
+  -moz-border-radius-bottomright: $default_border-radius; 
+  -webkit-border-bottom-right-radius: $default_border-radius; 
+  border-bottom-right-radius: $default_border-radius;
+}
+
+@mixin corners_bottom {
+  @include corners_bottom_left;
+  @include corners_bottom_right;
+}
+
+@mixin gradient($c1, $c2, $backgroundColor){
+  // non css3 browsers
+  background: $backgroundColor;
+  
+  // webkit
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, $c1), color-stop(1.0, $c2));
+                
+  // firefox 3.6
+  background: -moz-linear-gradient(center top , $c1 0%, $c2 100%) repeat scroll 0 0 $backgroundColor;
+  
+  // Internet Explorer
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#{$c1}", endColorstr="#{$c2}");
+}
+
+@mixin shadow($a, $b, $c, $d) {
+  -moz-box-shadow: $a $b $c $d;
+  -webkit-box-shadow: $a $b $c $d;
+  box-shadow: $a $b $c $d;
+}
+@mixin inset_shadow($a, $b, $c, $d) {
+  -moz-box-shadow: $a $b $c $d inset;
+  -webkit-box-shadow: $a $b $c $d inset;
+  box-shadow: $a $b $c $d inset;
+}

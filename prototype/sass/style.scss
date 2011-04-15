@@ -1,0 +1,61 @@
+// How much the corners are rounded
+$default_border-radius: 6px;
+
+// Padding of margin of elements to other elements
+$default_margin: 20px;
+$twice_margin: $default_margin * 2;
+$half_margin: $default_margin / 2;
+
+@import "_mixins.scss";
+
+*{
+  padding : 0px;
+  margin : 0px;
+  border : 0px;
+}
+
+html{
+  background : orange;
+}
+body {
+  #wrapper{
+    width : 100%;
+    height : 100%;
+    @include gradient(orange, yellow, orange);
+    
+    #container{
+      width : 800px;
+      min-height : 600px;
+      margin : 100px auto auto;
+      border : 2px solid white;
+      background : rgb(100, 149, 237);
+      @include corners();
+      
+      #header{
+        width : 600px;
+        height: 200px;
+        float: left;
+      }
+      #where-am-i{
+        width : 200px;
+        height: 200px;
+        float: left;
+        
+        #quicknav{
+        
+        }
+        #info{
+        
+        }
+      }
+      #content{
+        width : 600px;
+        float: left;
+      }
+      #sidebar{
+        width : 200px;
+        float: left;
+      }
+    }
+  }
+}
