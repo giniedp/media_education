@@ -1,3 +1,12 @@
+log = function(message){
+  if (console){
+    console.log(message);
+    return true;
+  }
+  return false;
+};
+
+
 (function(){
   
   // Initial Setup
@@ -21,48 +30,57 @@
   // App.View
   // -----------------
   App.View = {
+    content : $("#content"),
+    sidebar : $("#sidebar"),
     
+    moduleList : $("<div class='module-list'></div>"), 
+    templates : {
+      whereami : "",
+      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li><a href='<%= link.url %>' onclick='App.Controller.evaluateHash(\"<%= link.url %>\");'><%= link.name %></a></li> <% }); %> </ul>")
+    }
   };
   
   // App.Controller
   // -----------------
   App.Controller = {
     pickModule : function(module){
-      App.currentModule = module;
+      if (typeof(module) === "string"){
+        App.currentModule = App.Modules[module];
+      } else {
+        App.currentModule = module;
+      }
+      return App.currentModule;
+    },
+    evaluateHash : function(newHash){
+      var hash = window.location.hash;
       
-      // TODO
-      // - set as current module
-      // - refresh the view
-    },
-    showIndexPage : function(){
+      if (typeof(newHash) === "string"){
+        hash = newHash;
+        // FIXME
+        // window.location.hash = hash;
+      }
       
-    },
-    showModule : function(){
+      hash = hash.replace(/.*\#/, "").split("/");
       
-    },
-
-    showTrainingPage : function(){
-      // TODO
-    },
-    showLearningPage : function(){
-      // TODO
-    },
-    showWikiContent : function(content, callback){
-      // TODO
-      // show the content in a modal window
+      log(hash);
+      var current = hash.shift();
+      if (current === "app"){
+        current = hash.shift();
+        App.Controller.pickModule(current).evaluateHash(hash);
+      } else {
+        // TODO:
+        // check current
+      }
     },
     
     pathFor : function(arg){
-      return arg.join("/");
+      return "#" + arg.join("/");
     },
-    modulePagePath : function(learnPage, pageName){
-      if (learnPage === true){
-        return App.Controller.pathFor(["app", App.currentModule.name, "learn", pageName]);
-      } else if (learnPage === false){
-        return App.Controller.pathFor(["app", App.currentModule.name, "practise", pageName]);
-      } else {
-        return App.Controller.pathFor(["app", App.currentModule.name]);
+    modulePagePath : function(module, learnPage, pageName){
+      if (typeof(module) === "string"){
+        module = App.Modules[module];
       }
+      return module.pagePath(learnPage, pageName);
     }
   };
   
@@ -82,7 +100,22 @@
       $.error("No name given");
     }
     _.extend(this, { 
-      app : App
+      app : App,
+      evaluateHash : function(args){
+        log(args);
+      },
+      render : function(){
+        return "FOO";
+      },
+      pagePath : function(learnPage, pageName){
+        if (learnPage === true){
+          return App.Controller.pathFor(["app", this.name, "learn", pageName]);
+        } else if (learnPage === false){
+          return App.Controller.pathFor(["app", this.name, "practise", pageName]);
+        } else {
+          return App.Controller.pathFor(["app", this.name]);
+        }
+      },
       // Add further module implementations that may be overridden with options here
     }, options);
     
@@ -90,7 +123,16 @@
     // this.someFunction = function(){ ... }
   };
   App.Module.extend = function(options){
-    App.Modules[options.name] = new App.Module(options);
+    App.Modules[options.name] = new App.Module(options);;
+    
+    var links = _.map(App.Modules, function(n){
+      return { 
+        url   : n.pagePath(), 
+        name  : n.name 
+      };
+    });
+    
+    App.View.moduleList.html( App.View.templates.linkList(links) );
     return App.Modules[options.name];
   };
 
@@ -116,5 +158,7 @@
     return new App.User(options);
   };
 
-  App.currentUser = App.User.extend();
+  App.currentUser = App.User.extend({ name : "Alex" });
+  
+  App.View.sidebar.append(App.View.moduleList);
 })();
