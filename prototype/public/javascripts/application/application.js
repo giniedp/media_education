@@ -30,13 +30,16 @@ log = function(message){
   // App.View
   // -----------------
   App.View = {
-    content : $("#content"),
-    sidebar : $("#sidebar"),
+    content  : $("#content"),
+    sidebar  : $("#sidebar"),
+    quicknav : $("#quicknav"),
+    info     : $("#info"),
     
     moduleList : $("<div class='module-list'></div>"), 
     templates : {
-      whereami : "",
-      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li><a href='<%= link.url %>' onclick='App.Controller.evaluateHash(\"<%= link.url %>\");'><%= link.name %></a></li> <% }); %> </ul>"),
+      localLink: _.template("<a href='<%= url %>' onclick='App.Controller.evaluateHash(\"<%= url %>\");'><%= name %></a>"),
+      whereami : _.template("<div>Du bist hier:</div> <% _.each(links, function(link) { %><div><%= App.View.templates.localLink(link) %></div><% }); %>  <% if (statistics) { %> <div><%= statistics %></div> <% } %>"),
+      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li><%= App.View.templates.localLink(link) %></li> <% if (arguments[0].subnav) { %><%= App.View.templates.linkList(arguments[0].subnav) %><% } %><% }); %> </ul>"),
       article  : _.template("<h2><%= title %></h2><p><%= body %></p>")
     }
   };

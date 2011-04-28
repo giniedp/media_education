@@ -14,62 +14,133 @@
         return;
       }
       
-      this.Controller.showIndexPage(hash.shift());
+      this.Controller.showIndexPage();
     },
     Controller : {
       showLearnPage : function(name){
-        var content = _.map(I18n.t("app.modules.math.pages.learn." + name), function(item){
-          return App.View.templates.article(item);
-        }).join(" ");
-        
+        var math = App.Modules.mathematics;
         var navContent = App.View.templates.linkList([{
           name : "Start",
-          url  : App.Modules.mathematics.pagePath(true, "index")
+          url  : math.pagePath(true, "index")
         },{
-          name : "Seite 1",
-          url  : App.Modules.mathematics.pagePath(true, "page1")
+          name : "Alle von 9, den letzten von 10",
+          url  : math.pagePath(true, "page1")
         },{
-          name : "Seite 2",
-          url  : App.Modules.mathematics.pagePath(true, "page2")
+          name : "Vertikal und kreuzweise",
+          url  : math.pagePath(true, "page2"),
+          subnav : [{
+            name : "für einstellige Zahlen",
+            url  : math.pagePath(true, "page2a")
+          },{
+            name : "für Zahlen unter und nahe 100",
+            url  : math.pagePath(true, "page2b")
+          },{
+            name : "für Zahlen über und nahe 100",
+            url  : math.pagePath(true, "page2c")
+          },{
+            name : "für Summen kleiner Brüche",
+            url  : math.pagePath(true, "page2d")
+          }]
+        },{
+          name : "Um 1 mehr als der davor",
+          url  : math.pagePath(true, "page3")
+        },{
+          name : "Multiplikation mit 11",
+          url  : math.pagePath(true, "page4")
+        },{
+          name : "Division durch 9",
+          url  : math.pagePath(true, "page5")
         }]);
+        var waiContent = App.View.templates.whereami({
+          links : [{
+            name : "Mathematik",
+            url  : math.pagePath()
+          },{
+            name : "Lernen - " + name,
+            url  : math.pagePath(true, name)
+          }],
+          statistics : ""
+        });
         
-        App.Controller.swapContent(App.View.content, content);
-        App.Controller.swapContent(App.View.sidebar, navContent);
+        $.get("modules/mathematics/learn/" + name + ".html", function(data){
+            App.Controller.swapContent(App.View.content, data);
+            App.Controller.swapContent(App.View.sidebar, navContent);
+            App.Controller.swapContent(App.View.info, waiContent);
+        });
       },
       showPractisePage : function(name){
-        var content = _.map(I18n.t("app.modules.math.pages.practise." + name), function(item){
-          return App.View.templates.article(item);
-        }).join(" ");
-        
+        var math = App.Modules.mathematics;
         var navContent = App.View.templates.linkList([{
           name : "Start",
-          url  : App.Modules.mathematics.pagePath(false, "index")
+          url  : math.pagePath(false, "index")
         },{
-          name : "Seite 1",
-          url  : App.Modules.mathematics.pagePath(false, "page1")
+          name : "Alle von 9 und den letzten von 10",
+          url  : math.pagePath(false, "page1")
         },{
-          name : "Seite 2",
-          url  : App.Modules.mathematics.pagePath(false, "page2")
+          name : "Vertikal und Kreuzweise",
+          url  : math.pagePath(false, "page2"),
+          subnav : [{
+            name : "für einstellige Zahlen",
+            url  : math.pagePath(false, "page2a")
+          },{
+            name : "für Zahlen unter und nahe 100",
+            url  : math.pagePath(false, "page2b")
+          },{
+            name : "für Zahlen über und nahe 100",
+            url  : math.pagePath(false, "page2c")
+          },{
+            name : "für Summen kleiner Brüche",
+            url  : math.pagePath(false, "page2d")
+          }]
+        },{
+          name : "Um 1 mehr als dem davor",
+          url  : math.pagePath(false, "page3")
+        },{
+          name : "Multiplikation mit 11",
+          url  : math.pagePath(false, "page4")
+        },{
+          name : "Division durch 9",
+          url  : math.pagePath(false, "page5")
         }]);
+        var waiContent = App.View.templates.whereami({
+          links : [{
+            name : "Mathematik",
+            url  : math.pagePath()
+          },{
+            name : "Üben - " + name,
+            url  : math.pagePath(false, name)
+          }],
+          statistics : ""
+        });
         
-        App.Controller.swapContent(App.View.content, content);
-        App.Controller.swapContent(App.View.sidebar, navContent);
+        $.get("modules/mathematics/practise/" + name + ".html", function(data){
+            App.Controller.swapContent(App.View.content, data);
+            App.Controller.swapContent(App.View.sidebar, navContent); 
+            App.Controller.swapContent(App.View.info, waiContent);         
+        });
       },
       showIndexPage : function(){
-        var content = _.map(I18n.t("app.modules.math.pages.index"), function(item){
-          return App.View.templates.article(item);
-        }).join(" ");
-
+        var math = App.Modules.mathematics;
         var navContent = App.View.templates.linkList([{
           name : "Lernen",
-          url  : App.Modules.mathematics.pagePath(true, "index")
+          url  : math.pagePath(true, "index")
         },{
           name : "Üben",
-          url  : App.Modules.mathematics.pagePath(false, "index")
+          url  : math.pagePath(false, "index")
         }]);
+        var waiContent = App.View.templates.whereami({
+          links : [{
+            name : "Mathematik",
+            url  : math.pagePath()
+          }],
+          statistics : ""
+        });
         
-        App.Controller.swapContent(App.View.content, content);
-        App.Controller.swapContent(App.View.sidebar, navContent);
+        $.get("modules/mathematics/index.html", function(data){
+            App.Controller.swapContent(App.View.content, data);
+            App.Controller.swapContent(App.View.sidebar, navContent);   
+            App.Controller.swapContent(App.View.info, waiContent);       
+        });
       }
     }
   });
