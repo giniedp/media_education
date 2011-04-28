@@ -76,11 +76,45 @@ log = function(message){
       }
     },
     swapContent : function(container, content, callback){
+      if (typeof(content) === "function"){
+        content = App.Controller.processContent(content.call());
+      } else {
+        content = App.Controller.processContent(content);
+      }
+        
       $(container).fadeOut(300, function(){
-        if (typeof(content) === "function"){
-          container.html(content.call()).fadeIn(300, callback);
-        } else {
-          container.html(content).fadeIn(300, callback);
+        container.html(content).fadeIn(300, callback);
+      });
+    },
+    processContent : function(content){
+      content = $(content);
+      content.find("a").each(function(){
+        var $this = $(this);
+        if ($this.attr("href").indexOf("wikipedia.org") >= 0){
+          $this.click(function(e){
+            App.Controller.showIframe($(this).attr("href"));
+            return false;
+          });
+        }
+      });
+      return content;
+    },
+    showIframe : function(url){
+      var dialog = $("<div id='dialog'/>");
+      $("body").append(dialog);
+      dialog.html("<iframe src='" + url + "' width='100%' height='95%'></iframe>");
+      
+      dialog.dialog({
+        modal : true,
+        width : "90%",
+        height : 600,
+        buttons : {
+          "Schliessen" : function(){
+            $(this).dialog("close");
+          }
+        },
+        close : function(){
+          $("body #dialog").remove();
         }
       });
     },
