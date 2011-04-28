@@ -36,7 +36,8 @@ log = function(message){
     moduleList : $("<div class='module-list'></div>"), 
     templates : {
       whereami : "",
-      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li><a href='<%= link.url %>' onclick='App.Controller.evaluateHash(\"<%= link.url %>\");'><%= link.name %></a></li> <% }); %> </ul>")
+      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li><a href='<%= link.url %>' onclick='App.Controller.evaluateHash(\"<%= link.url %>\");'><%= link.name %></a></li> <% }); %> </ul>"),
+      article  : _.template("<h2><%= title %></h2><p><%= body %></p>")
     }
   };
   
@@ -62,7 +63,6 @@ log = function(message){
       
       hash = hash.replace(/.*\#/, "").split("/");
       
-      log(hash);
       var current = hash.shift();
       if (current === "app"){
         current = hash.shift();
@@ -72,7 +72,15 @@ log = function(message){
         // check current
       }
     },
-    
+    swapContent : function(container, content, callback){
+      $(container).fadeOut(300, function(){
+        if (typeof(content) === "function"){
+          container.html(content.call()).fadeIn(300, callback);
+        } else {
+          container.html(content).fadeIn(300, callback);
+        }
+      });
+    },
     pathFor : function(arg){
       return "#" + arg.join("/");
     },
