@@ -77,11 +77,10 @@ log = function(message){
     },
     swapContent : function(container, content, callback){
       if (typeof(content) === "function"){
-        content = App.Controller.processContent(content.call());
-      } else {
-        content = App.Controller.processContent(content);
+        content = content.call();  
       }
-        
+      content = App.Controller.processContent(content);
+      
       $(container).fadeOut(300, function(){
         container.html(content).fadeIn(300, callback);
       });

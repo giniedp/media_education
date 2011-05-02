@@ -17,40 +17,19 @@
       this.Controller.showIndexPage();
     },
     Controller : {
+      makeLinks : function(pages, learn){
+        var links = [];
+        _.each(_.keys(pages), function(key){
+          links.push({
+            name : pages[key].name,
+            url  : App.Modules.mathematics.pagePath(learn, key)
+          });
+        });
+        return links;
+      },
       showLearnPage : function(name){
         var math = App.Modules.mathematics;
-        var navContent = App.View.templates.linkList([{
-          name : "Start",
-          url  : math.pagePath(true, "index")
-        },{
-          name : "Alle von 9, den letzten von 10",
-          url  : math.pagePath(true, "page1")
-        },{
-          name : "Vertikal und kreuzweise",
-          url  : math.pagePath(true, "page2"),
-          subnav : [{
-            name : "für einstellige Zahlen",
-            url  : math.pagePath(true, "page2a")
-          },{
-            name : "für Zahlen unter und nahe 100",
-            url  : math.pagePath(true, "page2b")
-          },{
-            name : "für Zahlen über und nahe 100",
-            url  : math.pagePath(true, "page2c")
-          },{
-            name : "für Summen kleiner Brüche",
-            url  : math.pagePath(true, "page2d")
-          }]
-        },{
-          name : "Um 1 mehr als der davor",
-          url  : math.pagePath(true, "page3")
-        },{
-          name : "Multiplikation mit 11",
-          url  : math.pagePath(true, "page4")
-        },{
-          name : "Division durch 9",
-          url  : math.pagePath(true, "page5")
-        }]);
+        var navContent = App.View.templates.linkList(math.Controller.makeLinks(math.Model.LearnPages, true));
         var waiContent = App.View.templates.whereami({
           links : [{
             name : "Mathematik",
@@ -70,38 +49,7 @@
       },
       showPractisePage : function(name){
         var math = App.Modules.mathematics;
-        var navContent = App.View.templates.linkList([{
-          name : "Start",
-          url  : math.pagePath(false, "index")
-        },{
-          name : "Alle von 9 und den letzten von 10",
-          url  : math.pagePath(false, "page1")
-        },{
-          name : "Vertikal und Kreuzweise",
-          url  : math.pagePath(false, "page2"),
-          subnav : [{
-            name : "für einstellige Zahlen",
-            url  : math.pagePath(false, "page2a")
-          },{
-            name : "für Zahlen unter und nahe 100",
-            url  : math.pagePath(false, "page2b")
-          },{
-            name : "für Zahlen über und nahe 100",
-            url  : math.pagePath(false, "page2c")
-          },{
-            name : "für Summen kleiner Brüche",
-            url  : math.pagePath(false, "page2d")
-          }]
-        },{
-          name : "Um 1 mehr als dem davor",
-          url  : math.pagePath(false, "page3")
-        },{
-          name : "Multiplikation mit 11",
-          url  : math.pagePath(false, "page4")
-        },{
-          name : "Division durch 9",
-          url  : math.pagePath(false, "page5")
-        }]);
+        var navContent = App.View.templates.linkList(math.Controller.makeLinks(math.Model.PractisePages, false));
         var waiContent = App.View.templates.whereami({
           links : [{
             name : "Mathematik",
@@ -114,7 +62,9 @@
         });
         
         $.get("modules/mathematics/practise/" + name + ".html", function(data){
-            App.Controller.swapContent(App.View.content, data);
+            App.Controller.swapContent(App.View.content, data, function(){
+              //Ap.View.content.find("#exercise")
+            });
             App.Controller.swapContent(App.View.sidebar, navContent); 
             App.Controller.swapContent(App.View.info, waiContent);         
         });
@@ -141,6 +91,129 @@
             App.Controller.swapContent(App.View.sidebar, navContent);   
             App.Controller.swapContent(App.View.info, waiContent);       
         });
+      }
+    },
+    Model : {
+      LearnPages : {
+        "index" : {
+          name : "Start",
+          depth: 0
+        },
+        "page1" : {
+          name : "Alle von 9, den letzten von 10",
+          depth: 0
+        },
+        "page2" : {
+          name : "Vertikal und kreuzweise",
+          depth: 0
+        },
+        "page2a" : {
+          name : "für einstellige Zahlen",
+          depth: 1
+        },
+        "page2b" : {
+          name : "für Zahlen unter und nahe 100",
+          depth: 1
+        },
+        "page2c" : {
+          name : "für Zahlen über und nahe 100",
+          depth: 1
+        },
+        "page2d" : {
+          name : "für Summen kleiner Brüche",
+          depth: 1
+        },
+        "page3" : {
+          name : "Um 1 mehr als der davor"
+        },
+        "page4" : {
+          name : "Multiplikation mit 11"
+        },
+        "page5" : {
+          name : "Division durch 9"
+        }
+      },
+      PractisePages : {
+        "index" : {
+          name : "Start",
+          depth: 0
+        },
+        "page1" : {
+          name     : "Alle von 9 und den letzten von 10",
+          depth    : 0,
+          exercise : {
+            figure1 : [10, 100, 1000],
+            figure2 : [[0, 9], [0, 99], [0, 999]],
+            operator: ["-"]
+          }
+        },
+        "page2" : {
+          name : "Vertikal und Kreuzweise",
+          depth: 0
+        },
+        "page2a" : {
+          name     : "für einstellige Zahlen",
+          depth    : 0,
+          exercise : {
+            figure1 : [[0, 10]],
+            figure2 : [[0, 10]],
+            operator: ["*"]
+          }
+        },
+        "page2b" : {
+          name     : "für Zahlen unter und nahe 100",
+          depth    : 0,
+          exercise : {
+            figure1 : [[85, 100]],
+            figure2 : [[85, 100]],
+            operator: ["*"]
+          }
+        },
+        "page2c" : {
+          name     : "für Zahlen über und nahe 100",
+          depth    : 0,
+          exercise : {
+            figure1 : [[100, 125]],
+            figure2 : [[100, 125]],
+            operator: ["*"]
+          }
+        },
+        "page2d" : {
+          name     : "für Summen kleiner Brüche",
+          depth    : 0,
+          exercise : {
+            figure1 : [[0, 10]],
+            figure2 : [[0, 10]],
+            operator: ["/"]
+          }
+        },
+        "page3" : {
+          name     : "Um 1 mehr als dem davor",
+          depth    : 0,
+          exercise : {
+            figure1 : [5, 15, 25, 35, 45, 55, 65, 75, 85, 95],
+            figure2 : "figure1",
+            operator: ["*"]
+          }
+        },
+        "page4" : {
+          name     : "Multiplikation mit 11",
+          depth    : 0,
+          exercise : {
+            figure1 : [[10, 99]],
+            figure2 : [11],
+            operator: ["*"]
+          }
+        },
+        "page5" : {
+          name     : "Division durch 9",
+          depth    : 0,
+          exercise : {
+            figure1 : [[10, 1000]],
+            figure2 : 9,
+            operator: ["/"]
+          }
+        }
       }
     }
   });
