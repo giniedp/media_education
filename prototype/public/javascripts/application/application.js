@@ -38,7 +38,7 @@ log = function(message){
     moduleList : $("<div class='module-list'></div>"), 
     templates : {
       localLink: _.template("<a href='<%= url %>' onclick='App.Controller.evaluateHash(\"<%= url %>\");'><%= name %></a>"),
-      whereami : _.template("<div>Du bist hier:</div> <% _.each(links, function(link) { %><div><%= App.View.templates.localLink(link) %></div><% }); %>  <% if (statistics) { %> <div><%= statistics %></div> <% } %>"),
+      whereami : _.template("<div>Du bist hier:</div> <% _.each(links, function(link) { %><div><%= App.View.templates.localLink(link) %></div><% }); %>  <% if (statistics) { %> <div><%= App.currentModule.statsTemplate({ statistics : statistics}) %></div> <% } %>"),
       linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li class='depth-<%= link.depth %>'><%= App.View.templates.localLink(link) %></li> <% if (arguments[0].subnav) { %><%= App.View.templates.linkList(arguments[0].subnav) %><% } %><% }); %> </ul>"),
       article  : _.template("<h2><%= title %></h2><p><%= body %></p>"),
       quickicon: _.template("<li <% if(item.enabled) { %> onclick=\"<%= item.action %>\" <% } %> class='ui-state-<% if(item.enabled){ %>default<% } else { %>error<% } %> ui-corner-all' title='<%= item.tiptip %>'><span class='ui-icon ui-icon-<%= item.icon %>'></span></li>"),
@@ -99,36 +99,45 @@ log = function(message){
       
       var iconContent = App.View.templates.quicknav([{
         enabled : true,
-        tiptip  : "Gehe zu Modul: " + App.currentModule.displayName,
+        tiptip  : "Zur Hauptseite des Moduls: " + App.currentModule.displayName,
         icon    : "folder-open",
         action  : "alert('foo');"
       },{
         enabled : true,
-        tiptip  : "Hauptseite",
+        tiptip  : "Zur Hauptseite des Programms",
         icon    : "home",
         action  : "App.Controller.evaluateHash('#index')"
       },{
-        enabled : false,
+        enabled : true,
         tiptip  : "Login / Profilseite",
         icon    : "person",
         action  : "alert('foo');"
       },{
         enabled : App.currentModule.hasHelpPage,
-        tiptip  : (App.currentModule.helpTitle || "Hilfe zur aktuellen Seite"),
+        tiptip  : (App.currentModule.helpTitle || (App.currentModule.hasHelpPage ? "Hilfe zur aktuellen Seite" : "Zu der aktuellen Seite ist keine Hilfe verfügbar")),
         icon    : "help",
         action  : App.currentModule.helpFunction
       }]);
       
-      App.Controller.swapContent(App.View.quicknav, iconContent);
+      App.Controller.swapContent(App.View.quicknav, iconContent, 0);
     },
-    swapContent : function(container, content, callback){
+    swapContent : function(container, content, callback, duration){
       if (typeof(content) === "function"){
         content = content.call();  
       }
       content = App.Controller.processContent(content);
       
-      $(container).fadeOut(300, function(){
-        container.html(content).fadeIn(300, callback);
+      if (typeof(callback) === "number"){
+        duration = callback;
+        callback = undefined;
+      }
+      
+      if (typeof(duration) !== "number"){ 
+        duration = 300; 
+      }
+      
+      $(container).fadeOut(duration, function(){
+        container.html(content).fadeIn(duration, callback);
         container.find("*[title]").tipTip({});
       });
     },
@@ -191,7 +200,11 @@ log = function(message){
       $.error("No name given");
     }
     _.extend(this, { 
-      app : App,
+      app           : App,
+      hasHelpPage   : false,
+      helpFunction  : "",
+      whereAmIData  : {},
+      statsTemplate : _.template("Statistics: "),
       evaluateHash : function(args){
         log(args);
       },
@@ -243,7 +256,14 @@ log = function(message){
     }, options);
     
     // add further module implementation that may not be overridden here
-    // this.someFunction = function(){ ... }
+    //this.someFunction = function(){ ... }
+    
+    this.moduleStatistics = function(module, options){
+      if (!this.statistics[module.name]){
+        this.statistics[module.name] = {};
+      }
+      return this.statistics[module.name]
+    };
   };
   App.User.extend = function(options){
     return new App.User(options);

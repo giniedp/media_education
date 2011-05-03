@@ -38,6 +38,10 @@
   @include corners_bottom_left;
   @include corners_bottom_right;
 }
+@mixin corners_right {
+  @include corners_top_right;
+  @include corners_bottom_right;
+}
 
 @mixin gradient($c1, $c2, $backgroundColor){
   // non css3 browsers

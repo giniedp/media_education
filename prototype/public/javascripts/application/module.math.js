@@ -1,10 +1,13 @@
 (function(){
   
   App.Module.extend({ 
-    name          : "mathematics", 
-    displayName   : I18n.t("app.modules.math.name"),
-    hasHelpPage   : false,
-    helpFunction  : "",
+    name           : "mathematics", 
+    displayName    : I18n.t("app.modules.math.name"),
+    hasHelpPage    : false,
+    helpFunction   : "",
+    whereAmIData   : {},
+    navigationData : {},
+    statsTemplate  : _.template("<div title='Du hast bisher <%= statistics.wrongAnswers | 0 %> falsche und <%= statistics.correctAnswers | 0 %> richtige Antworten gegeben.'> <span style='color:red;'><%= statistics.wrongAnswers | 0 %></span> / <span style='color:green;'><%= statistics.correctAnswers | 0 %></span> </div>"),
     evaluateHash  : function(hash){
       var current = hash.shift();
       
@@ -56,6 +59,28 @@
         //[0, 10]
         return Math.round((Math.random() * (range[1] - range[0])));
       },
+      validateExercise : function(container){
+        var $this = container;
+
+        var figure1 = $this.find(".figure-1").text();
+        var figure2 = $this.find(".figure-2").text();
+        var operator = $this.find(".operator").text();
+        var userResult = $this.find("input.result").val();
+        var result = eval([figure1, operator, figure2].join(" "));
+        
+        var stats = App.currentUser.moduleStatistics(App.currentModule);
+        
+        if (result == userResult){
+          $this.find(".result").animate({ "background-color" : "green" });
+          stats.correctAnswers = (stats.correctAnswers | 0) + 1;
+        } else {
+          $this.find(".result").animate({ "background-color" : "red" });
+          stats.wrongAnswers = (stats.wrongAnswers | 0) + 1;
+        }
+        
+        var waiContent = App.View.templates.whereami(App.Modules.mathematics.whereAmIData);
+        App.Controller.swapContent(App.View.info, waiContent, 0);
+      },
       initializeExercises : function(name){
         var math = App.Modules.mathematics;
         var data = math.Model.PractisePages[name];
@@ -72,7 +97,7 @@
             obj.figure2 = math.Controller.figureFor(data.exercise.figure2, obj.figure1);
             obj.operator= data.exercise.operator[0];
             
-            var temp = _.template('<div class="exercise"><span class="figure-1"><%= figure1 %></span><span class="operator"><%= operator %></span><span class="figure-2"><%= figure2 %></span><span class="equal-sign">=</span><input class="result" type="text" autocomplete="off"></input><span class="validation"></span></div>',obj);
+            var temp = _.template('<div class="exercise"><span class="figure-1"><%= figure1 %></span><span class="operator"><%= operator %></span><span class="figure-2"><%= figure2 %></span><span class="equal-sign">=</span><input class="result" type="text" autocomplete="off" onchange="App.Modules.mathematics.Controller.validateExercise($(this).parent());"></input><span class="validation"></span></div>',obj);
             $(temp).hide().appendTo(content).fadeIn(500);
           }
 
@@ -84,8 +109,8 @@
       },
       showLearnPage : function(name){
         var math = App.Modules.mathematics;
-        var navContent = App.View.templates.linkList(math.Controller.makeLinks(math.Model.LearnPages, true));
-        var waiContent = App.View.templates.whereami({
+        math.navigationData = math.Controller.makeLinks(math.Model.LearnPages, true);
+        math.whereAmIData = {
           links : [{
             name : math.displayName,
             url  : math.pagePath()
@@ -93,19 +118,23 @@
             name : "Lernen - " + math.Model.LearnPages[name].name,
             url  : math.pagePath(true, name)
           }],
-          statistics : ""
-        });
+          statistics : App.currentUser.moduleStatistics(math)
+        }
+
+        var navContent = App.View.templates.linkList(math.navigationData);
+        var waiContent = App.View.templates.whereami(math.whereAmIData);
         
         $.get("modules/mathematics/learn/" + name + ".html", function(data){
             App.Controller.swapContent(App.View.content, data);
-            App.Controller.swapContent(App.View.sidebar, navContent);
-            App.Controller.swapContent(App.View.info, waiContent);
+            App.Controller.swapContent(App.View.sidebar, navContent, 0);
+            App.Controller.swapContent(App.View.info, waiContent, 0);
         });
       },
       showPractisePage : function(name){
         var math = App.Modules.mathematics;
-        var navContent = App.View.templates.linkList(math.Controller.makeLinks(math.Model.PractisePages, false));
-        var waiContent = App.View.templates.whereami({
+        math.navigationData = math.Controller.makeLinks(math.Model.PractisePages, false);
+        
+        math.whereAmIData = {
           links : [{
             name : math.displayName,
             url  : math.pagePath()
@@ -113,38 +142,45 @@
             name : "Üben - " + math.Model.PractisePages[name].name,
             url  : math.pagePath(false, name)
           }],
-          statistics : ""
-        });
+          statistics : App.currentUser.moduleStatistics(math)
+        }
+        
+        var navContent = App.View.templates.linkList(math.navigationData);
+        var waiContent = App.View.templates.whereami(math.whereAmIData);
 
         $.get("modules/mathematics/practise/" + name + ".html", function(data){
             App.Controller.swapContent(App.View.content, data, function(){
               App.Modules.mathematics.Controller.initializeExercises(name);
             });
-            App.Controller.swapContent(App.View.sidebar, navContent); 
-            App.Controller.swapContent(App.View.info, waiContent);         
+            App.Controller.swapContent(App.View.sidebar, navContent, 0); 
+            App.Controller.swapContent(App.View.info, waiContent, 0);         
         });
       },
       showIndexPage : function(){
         var math = App.Modules.mathematics;
-        var navContent = App.View.templates.linkList([{
+        math.navigationData = [{
           name : "Lernen",
           url  : math.pagePath(true, "index")
         },{
           name : "Üben",
           url  : math.pagePath(false, "index")
-        }]);
-        var waiContent = App.View.templates.whereami({
+        }];
+        
+        math.whereAmIData = {
           links : [{
             name : "Mathematik",
             url  : math.pagePath()
           }],
           statistics : ""
-        });
+        }
+        
+        var navContent = App.View.templates.linkList(math.navigationData);
+        var waiContent = App.View.templates.whereami(math.whereAmIData);
         
         $.get("modules/mathematics/index.html", function(data){
             App.Controller.swapContent(App.View.content, data);
-            App.Controller.swapContent(App.View.sidebar, navContent);   
-            App.Controller.swapContent(App.View.info, waiContent);       
+            App.Controller.swapContent(App.View.sidebar, navContent, 0);   
+            App.Controller.swapContent(App.View.info, waiContent, 0);       
         });
       }
     },

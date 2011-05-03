@@ -15,22 +15,50 @@ $half_margin: $default_margin / 2;
 }
 
 html{
-  background : orange;
+  background : #ffc601;
+  font: 15px Calibri,"Trebuchet MS",Verdana,sans-serif;
 }
 
+a {
+  color: white;
+  font-style: italic;
+}
 body {
   #wrapper{
     width : 100%;
     height : 100%;
-    @include gradient(orange, yellow, orange);
+    background : #ffc601;
+    //@include gradient(orange, yellow, orange);
     
     #container{
-      width : 800px;
-      min-height : 600px;
-      margin : 100px auto auto;
-      border : 2px solid white;
+      margin     : 100px auto auto;
+      width      : 600px;
+      min-height : 600px;      
+      border     : 5px solid white;
       background : rgb(100, 149, 237);
+      overflow   : visible;
       @include corners();
+      box-shadow: 0px 0px 5px #000;
+      
+      #left{
+        background: url('images/clip.png');
+        background-repeat: repeat-y;
+        
+        position: relative;
+        left: -20px;
+        width: 60px;
+        height: 590px;
+        float: left;
+      }
+      #middle{
+        width : 530px;
+        float: left;
+      }
+      #right{
+        width : 10px;
+        overflow : visible;
+        float: left;
+      }
       
       #header{
         width : 600px;
@@ -39,24 +67,110 @@ body {
       }
       #where-am-i{
         width : 200px;
-        height: 200px;
+        height: 175px;
         float: left;
+        padding: 50px;
+        margin-left: -50px;
+        margin-top: -50px;
         
+        background: url('images/note.png');
+        background-repeat: no-repeat;
+        
+        a {
+          color : black;
+        }
+        a:hover{
+          color: #888;
+        }
         #quicknav{
-        
+          float: right;
+          clear:both;
         }
         #info{
-        
+          clear:both;
+          position: relative;
+          top: 10px;
+        }
+      }
+      #header{
+      
+        h1{
+          margin: 50px 30px;
+          color: white;
+          font-weight: bold;
+          font-size: 80px;
         }
       }
       #content{
-        width : 600px;
+        width : 100%;
         float: left;
       }
       #sidebar{
+        margin-left: 10px;
         width : 200px;
         float: left;
+        ul{
+          li{
+            width: 175px;
+            height: 50px;
+            background : #6495ed;
+            margin-left: 0px;
+            margin-top: 3px;
+            list-style: none;
+            text-align: center;
+            border : 2px solid white;
+            border-left: 5px;
+            @include corners_right();
+            
+            a {
+              display: block;
+              padding: 15px 5px;
+              text-decoration: none;
+              color: white;
+              font-weight: bold;
+              font-style: normal;
+            }
+            a:hover {
+              color: yellow;
+            }
+          }
+        }
       }
     }
   }
+}
+
+#quicknav li {
+  cursor     : pointer;
+  float      : left;
+  list-style : none outside none;
+  margin     : 2px;
+  padding    : 4px;
+  position   : relative;
+}
+
+#exercise{
+  width: 400px;
+  .figure-1, .figure-2{
+  }
+  .exercise{
+    margin-bottom: 5px;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+    
+    input {
+      font-size: 30px;
+      padding: 5px;
+      width: 175px;
+      @include corners();
+      border: 3px solid white;
+      background: #ffc601;
+      box-shadow: 3px 3px 4px #000 inset;
+    }
+  }
+}
+
+input {
+  padding: 10px;
 }
