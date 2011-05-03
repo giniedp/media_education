@@ -36,3 +36,12 @@ body #wrapper {
     body #wrapper #container #sidebar {
       width: 200px;
       float: left; }
+
+#quicknav li {
+    cursor: pointer;
+    float: left;
+    list-style: none outside none;
+    margin: 2px;
+    padding: 4px;
+    position: relative;
+}

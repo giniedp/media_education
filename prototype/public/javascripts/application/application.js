@@ -39,11 +39,13 @@ log = function(message){
     templates : {
       localLink: _.template("<a href='<%= url %>' onclick='App.Controller.evaluateHash(\"<%= url %>\");'><%= name %></a>"),
       whereami : _.template("<div>Du bist hier:</div> <% _.each(links, function(link) { %><div><%= App.View.templates.localLink(link) %></div><% }); %>  <% if (statistics) { %> <div><%= statistics %></div> <% } %>"),
-      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li><%= App.View.templates.localLink(link) %></li> <% if (arguments[0].subnav) { %><%= App.View.templates.linkList(arguments[0].subnav) %><% } %><% }); %> </ul>"),
-      article  : _.template("<h2><%= title %></h2><p><%= body %></p>")
+      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li class='depth-<%= link.depth %>'><%= App.View.templates.localLink(link) %></li> <% if (arguments[0].subnav) { %><%= App.View.templates.linkList(arguments[0].subnav) %><% } %><% }); %> </ul>"),
+      article  : _.template("<h2><%= title %></h2><p><%= body %></p>"),
+      quickicon: _.template("<li <% if(item.enabled) { %> onclick=\"<%= item.action %>\" <% } %> class='ui-state-<% if(item.enabled){ %>default<% } else { %>error<% } %> ui-corner-all' title='<%= item.tiptip %>'><span class='ui-icon ui-icon-<%= item.icon %>'></span></li>"),
+      quicknav : _.template("<ul> <% _.each(arguments[0], function(item) { %> <%= App.View.templates.quickicon({ item : item }) %> <% }); %> </ul>")
     }
   };
-  
+
   // App.Controller
   // -----------------
   App.Controller = {
@@ -55,13 +57,34 @@ log = function(message){
       }
       return App.currentModule;
     },
+    evaluateAppHash : function(current, hash){
+      if (current === "sign_in") {
+
+      } else if (current === "register") {
+
+      } else if (current === "profile") {
+
+      } else {
+          var waiContent = App.View.templates.whereami({
+            links : [{
+              name : "Hauptseite",
+              url  : "#index"
+            }],
+            statistics : ""
+          });
+          $.get("app/index.html", function(data){
+            App.Controller.swapContent(App.View.content, data);
+            App.Controller.swapContent(App.View.sidebar, App.View.moduleList); 
+            App.Controller.swapContent(App.View.info, waiContent);   
+        });
+      }
+    },
     evaluateHash : function(newHash){
       var hash = window.location.hash;
       
       if (typeof(newHash) === "string"){
         hash = newHash;
-        // FIXME
-        // window.location.hash = hash;
+        window.location.hash = hash;
       }
       
       hash = hash.replace(/.*\#/, "").split("/");
@@ -71,9 +94,32 @@ log = function(message){
         current = hash.shift();
         App.Controller.pickModule(current).evaluateHash(hash);
       } else {
-        // TODO:
-        // check current
+        App.Controller.evaluateAppHash(current, hash);
       }
+      
+      var iconContent = App.View.templates.quicknav([{
+        enabled : true,
+        tiptip  : "Gehe zu Modul: " + App.currentModule.displayName,
+        icon    : "folder-open",
+        action  : "alert('foo');"
+      },{
+        enabled : true,
+        tiptip  : "Hauptseite",
+        icon    : "home",
+        action  : "App.Controller.evaluateHash('#index')"
+      },{
+        enabled : false,
+        tiptip  : "Login / Profilseite",
+        icon    : "person",
+        action  : "alert('foo');"
+      },{
+        enabled : App.currentModule.hasHelpPage,
+        tiptip  : (App.currentModule.helpTitle || "Hilfe zur aktuellen Seite"),
+        icon    : "help",
+        action  : App.currentModule.helpFunction
+      }]);
+      
+      App.Controller.swapContent(App.View.quicknav, iconContent);
     },
     swapContent : function(container, content, callback){
       if (typeof(content) === "function"){
@@ -83,6 +129,7 @@ log = function(message){
       
       $(container).fadeOut(300, function(){
         container.html(content).fadeIn(300, callback);
+        container.find("*[title]").tipTip({});
       });
     },
     processContent : function(content){
@@ -172,7 +219,7 @@ log = function(message){
     var links = _.map(App.Modules, function(n){
       return { 
         url   : n.pagePath(), 
-        name  : n.name 
+        name  : n.displayName 
       };
     });
     
@@ -185,12 +232,12 @@ log = function(message){
   // App.User
   // -----------------
   // This is our user data. Unless the user is signed in, we use the default guest user data.
-  // This one may be stored in the session to keep module statistic
+  // This one may be stored in the session to keep module statistics
   // User instance may be created like this
   // App.User.extend({ some : options, and : content });
   App.User = function(options){
     _.extend(this, { 
-      name : function(){ return I18n.t("app.user.guest_name"); },
+      name : I18n.t("app.user.guest_name"),
       statistics : {}
       // Add further user implementations that may be overridden with options here
     }, options);
@@ -202,7 +249,8 @@ log = function(message){
     return new App.User(options);
   };
 
-  App.currentUser = App.User.extend({ name : "Alex" });
-  
+
+
+  App.currentUser = App.User.extend({});
   App.View.sidebar.append(App.View.moduleList);
 })();

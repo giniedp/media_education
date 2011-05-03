@@ -3,6 +3,8 @@
   App.Module.extend({ 
     name          : "mathematics", 
     displayName   : I18n.t("app.modules.math.name"),
+    hasHelpPage   : false,
+    helpFunction  : "",
     evaluateHash  : function(hash){
       var current = hash.shift();
       
@@ -22,20 +24,73 @@
         _.each(_.keys(pages), function(key){
           links.push({
             name : pages[key].name,
-            url  : App.Modules.mathematics.pagePath(learn, key)
+            url  : App.Modules.mathematics.pagePath(learn, key),
+            depth: pages[key].depth || 0
           });
         });
         return links;
+      },
+      figureFor : function(range, fallback){
+        fallback = fallback || 0;
+        
+        if (typeof(range)==="string"){
+          return fallback;
+        }
+        
+        var allNumbers = false;
+        _.each(range, function(item){
+          allNumbers = allNumbers || _.isNumber(item);
+        });
+        
+        if (allNumbers){
+          var index = Math.round((Math.random() * (range.length - 1)));
+          return range[index];
+        }
+        
+        // get a random array from all arrays
+        // [[0, 10], [20, 30]]
+        var index = Math.round((Math.random() * (range.length - 1)));
+        range = range[index];
+        
+        // get a random number inside range
+        //[0, 10]
+        return Math.round((Math.random() * (range[1] - range[0])));
+      },
+      initializeExercises : function(name){
+        var math = App.Modules.mathematics;
+        var data = math.Model.PractisePages[name];
+        var content = App.View.content.find("#exercise");
+        content.fadeOut(500, function(){
+          $(this).html("").show();
+
+          if (!data.exercise){ return; }
+        
+          for (var i = 0; i < 10; i++){
+            var obj = {};
+            
+            obj.figure1 = math.Controller.figureFor(data.exercise.figure1);
+            obj.figure2 = math.Controller.figureFor(data.exercise.figure2, obj.figure1);
+            obj.operator= data.exercise.operator[0];
+            
+            var temp = _.template('<div class="exercise"><span class="figure-1"><%= figure1 %></span><span class="operator"><%= operator %></span><span class="figure-2"><%= figure2 %></span><span class="equal-sign">=</span><input class="result" type="text" autocomplete="off"></input><span class="validation"></span></div>',obj);
+            $(temp).hide().appendTo(content).fadeIn(500);
+          }
+
+          var temp = $("<a href='#' onclick=\"App.Modules.mathematics.Controller.initializeExercises('" + name + "'); return false;\">Neue Aufgaben</a>");
+          $(temp).hide().appendTo(content).fadeIn(500);          
+        });
+        
+
       },
       showLearnPage : function(name){
         var math = App.Modules.mathematics;
         var navContent = App.View.templates.linkList(math.Controller.makeLinks(math.Model.LearnPages, true));
         var waiContent = App.View.templates.whereami({
           links : [{
-            name : "Mathematik",
+            name : math.displayName,
             url  : math.pagePath()
           },{
-            name : "Lernen - " + name,
+            name : "Lernen - " + math.Model.LearnPages[name].name,
             url  : math.pagePath(true, name)
           }],
           statistics : ""
@@ -52,18 +107,18 @@
         var navContent = App.View.templates.linkList(math.Controller.makeLinks(math.Model.PractisePages, false));
         var waiContent = App.View.templates.whereami({
           links : [{
-            name : "Mathematik",
+            name : math.displayName,
             url  : math.pagePath()
           },{
-            name : "Üben - " + name,
+            name : "Üben - " + math.Model.PractisePages[name].name,
             url  : math.pagePath(false, name)
           }],
           statistics : ""
         });
-        
+
         $.get("modules/mathematics/practise/" + name + ".html", function(data){
             App.Controller.swapContent(App.View.content, data, function(){
-              //Ap.View.content.find("#exercise")
+              App.Modules.mathematics.Controller.initializeExercises(name);
             });
             App.Controller.swapContent(App.View.sidebar, navContent); 
             App.Controller.swapContent(App.View.info, waiContent);         
@@ -124,13 +179,16 @@
           depth: 1
         },
         "page3" : {
-          name : "Um 1 mehr als der davor"
+          name : "Um 1 mehr als der davor",
+          depth: 0
         },
         "page4" : {
-          name : "Multiplikation mit 11"
+          name : "Multiplikation mit 11",
+          depth: 0
         },
         "page5" : {
-          name : "Division durch 9"
+          name : "Division durch 9",
+          depth: 0
         }
       },
       PractisePages : {
@@ -153,7 +211,7 @@
         },
         "page2a" : {
           name     : "für einstellige Zahlen",
-          depth    : 0,
+          depth    : 1,
           exercise : {
             figure1 : [[0, 10]],
             figure2 : [[0, 10]],
@@ -162,7 +220,7 @@
         },
         "page2b" : {
           name     : "für Zahlen unter und nahe 100",
-          depth    : 0,
+          depth    : 1,
           exercise : {
             figure1 : [[85, 100]],
             figure2 : [[85, 100]],
@@ -171,7 +229,7 @@
         },
         "page2c" : {
           name     : "für Zahlen über und nahe 100",
-          depth    : 0,
+          depth    : 1,
           exercise : {
             figure1 : [[100, 125]],
             figure2 : [[100, 125]],
@@ -180,7 +238,7 @@
         },
         "page2d" : {
           name     : "für Summen kleiner Brüche",
-          depth    : 0,
+          depth    : 1,
           exercise : {
             figure1 : [[0, 10]],
             figure2 : [[0, 10]],
@@ -210,7 +268,7 @@
           depth    : 0,
           exercise : {
             figure1 : [[10, 1000]],
-            figure2 : 9,
+            figure2 : [9],
             operator: ["/"]
           }
         }
