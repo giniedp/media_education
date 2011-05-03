@@ -139,6 +139,11 @@ log = function(message){
       $(container).fadeOut(duration, function(){
         container.html(content).fadeIn(duration, callback);
         container.find("*[title]").tipTip({});
+        // left collegeblock background container must be stretched
+        // to the full height of the content page. Can not solve it with css onl
+        $("#left").css({
+          height : Math.max($("#middle").innerHeight(), $("#right").innerHeight()) 
+        });
       });
     },
     processContent : function(content){
