@@ -48,20 +48,19 @@ body {
   #wrapper{
     width : 100%;
     height : 100%;
-    background : #ffc601;
     padding-top: 50px;
     padding-bottom: 50px;
-    @include gradient($yellow * 1.1, $yellow, $yellow);
+    @include gradient($yellow * 1.2, $yellow, $yellow);
     
     #container{
       margin     : 0px auto auto;
       width      : 750px;
       min-height : 600px;      
       border     : 5px solid white;
-      background : $light_blue;
       overflow   : visible;
       @include corners();
-      box-shadow: 0px 0px 5px $black;
+      @include gradient($light_blue * 1.2, $light_blue, $light_blue);
+      @include shadow(0px, 0px, 5px, $black);
       
       #left{
         background: url('images/clip.png');
@@ -156,7 +155,13 @@ body {
               color: yellow;
             }
           }
+          li:hover{
+            background : url('images/bookmark-hover.png');
+          }
           li.active{
+            background : url('images/bookmark-current.png');
+          }
+          li:hover.active{
             background : url('images/bookmark-current.png');
           }
         }
@@ -191,7 +196,7 @@ body {
       @include corners();
       border: 3px solid white;
       background: #ffc601;
-      box-shadow: 3px 3px 4px #000 inset;
+      @include inset_shadow(3px, 3px, 4px, $black);
     }
   }
 }

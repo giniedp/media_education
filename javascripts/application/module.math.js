@@ -248,30 +248,30 @@
           name : "Start"
         },
         "page1" : {
-          name : "Alle von 9, den letzten von 10"
+          name : "Alle von 9, letzten von 10"
         },
         "page2" : {
           name     : "Vertikal und kreuzweise",
           backpage : "index"
         },
         "page2a" : {
-          name  : "für einstellige Zahlen",
+          name  : "Zahlen unter und nahe 10",
           parent: "page2"
         },
         "page2b" : {
-          name : "für Zahlen unter und nahe 100",
+          name  : "Zahlen über und nahe 10",
           parent: "page2"
         },
         "page2c" : {
-          name : "für Zahlen über und nahe 100",
+          name : "Zahlen unter und nahe 100",
           parent: "page2"
         },
         "page2d" : {
-          name : "für Summen kleiner Brüche",
+          name : "Zahlen über und nahe 100",
           parent: "page2"
         },
         "page3" : {
-          name : "Um 1 mehr als der davor"
+          name : "Einer mehr als der zuvor"
         },
         "page4" : {
           name : "Multiplikation mit 11"
@@ -285,11 +285,12 @@
           name : "Start"
         },
         "page1" : {
-          name     : "Alle von 9 und den letzten von 10",
+          name     : "Alle von 9, letzten von 10",
           exercise : {
-            figure1 : [10, 100, 1000],
-            figure2 : [[0, 9], [0, 99], [0, 999]],
-            operator: ["-"]
+            figure1    : [10, 100, 1000],
+            figure2    : [[0, 9], [0, 99], [0, 999]],
+            conditions : "figure1 >= figure2",
+            operator   : ["-"]
           }
         },
         "page2" : {
@@ -297,43 +298,43 @@
           backpage : "index"
         },
         "page2a" : {
-          name     : "für einstellige Zahlen",
+          name     : "Zahlen unter und nahe 10",
           parent   : "page2",
           exercise : {
-            figure1 : [[0, 10]],
-            figure2 : [[0, 10]],
+            figure1 : [[6, 10]],
+            figure2 : [[6, 10]],
             operator: ["*"]
           }
         },
         "page2b" : {
-          name     : "für Zahlen unter und nahe 100",
+          name     : "Zahlen über und nahe 10",
           parent   : "page2",
           exercise : {
-            figure1 : [[85, 100]],
-            figure2 : [[85, 100]],
+            figure1 : [[10, 15]],
+            figure2 : [[10, 15]],
             operator: ["*"]
           }
         },
         "page2c" : {
-          name     : "für Zahlen über und nahe 100",
+          name     : "Zahlen unter und nahe 100",
           parent   : "page2",
           exercise : {
-            figure1 : [[100, 125]],
-            figure2 : [[100, 125]],
+            figure1 : [[90, 100]],
+            figure2 : [[90, 100]],
             operator: ["*"]
           }
         },
         "page2d" : {
-          name     : "für Summen kleiner Brüche",
+          name     : "Zahlen über und nahe 100",
           parent   : "page2",
           exercise : {
-            figure1 : [[0, 10]],
-            figure2 : [[0, 10]],
-            operator: ["/"]
+            figure1 : [[100, 110]],
+            figure2 : [[100, 110]],
+            operator: ["*"]
           }
         },
         "page3" : {
-          name     : "Um 1 mehr als dem davor",
+          name     : "Einer mehr als der zuvor",
           exercise : {
             figure1 : [5, 15, 25, 35, 45, 55, 65, 75, 85, 95],
             figure2 : "figure1",
@@ -351,7 +352,7 @@
         "page5" : {
           name     : "Division durch 9",
           exercise : {
-            figure1 : [[10, 1000]],
+            figure1 : [[10, 99]],
             figure2 : [9],
             operator: ["/"]
           }
