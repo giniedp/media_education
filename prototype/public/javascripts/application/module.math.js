@@ -22,16 +22,66 @@
       this.Controller.showIndexPage();
     },
     Controller : {
-      makeLinks : function(pages, learn){
-        var links = [];
+      makeLinks : function(pages, name, learn){
+        var page = pages[name];
+        var parent;
+        if (page.parent){
+          parent = pages[page.parent];
+        }
+        var linkData = [];
+        
         _.each(_.keys(pages), function(key){
-          links.push({
-            name : pages[key].name,
-            url  : App.Modules.mathematics.pagePath(learn, key),
-            depth: pages[key].depth || 0
-          });
+          var item = pages[key];
+          if (item.parent === name){
+            linkData.push({
+              name   : item.name,
+              url    : App.Modules.mathematics.pagePath(learn, key),
+              active : false
+            });
+          }
         });
-        return links;
+        
+        if (linkData.length === 0){
+          // page has no children
+          // list all siblings and the page itself
+          _.each(_.keys(pages), function(key){
+            var item = pages[key];
+            if (item.parent === page.parent){
+              linkData.push({
+                name   : item.name,
+                url    : App.Modules.mathematics.pagePath(learn, key),
+                active : name === key
+              });
+            }
+          });
+          // add the parent page of current page as navigation item
+          if (parent){
+            linkData = [{
+              name   : parent.name,
+              url    : App.Modules.mathematics.pagePath(learn, page.parent),
+              active : false
+            }].concat(linkData);
+          }
+        } else {
+          // the page has child items that are listed as navigation items
+          // in this case the page is the selected page
+          linkData = [{
+            name   : page.name,
+            url    : App.Modules.mathematics.pagePath(learn, name),
+            active : true
+          }].concat(linkData);
+        }
+        
+        if (page.backpage || page.parent){
+          var key = page.backpage || page.parent.backpage;
+          linkData = [{
+            name   : "Zurück",
+            url    : App.Modules.mathematics.pagePath(learn, key),
+            active : false
+          }].concat(linkData);
+        }
+        
+        return linkData;
       },
       figureFor : function(range, fallback){
         fallback = fallback || 0;
@@ -90,7 +140,7 @@
 
           if (!data.exercise){ return; }
         
-          for (var i = 0; i < 10; i++){
+          for (var i = 0; i < 5; i++){
             var obj = {};
             
             obj.figure1 = math.Controller.figureFor(data.exercise.figure1);
@@ -108,15 +158,18 @@
 
       },
       showLearnPage : function(name){
+        name = name || "index";
         var math = App.Modules.mathematics;
-        math.navigationData = math.Controller.makeLinks(math.Model.LearnPages, true);
+        math.navigationData = math.Controller.makeLinks(math.Model.LearnPages, name, true);
         math.whereAmIData = {
           links : [{
-            name : math.displayName,
-            url  : math.pagePath()
+            name   : math.displayName,
+            url    : math.pagePath(),
+            active : false
           },{
-            name : "Lernen - " + math.Model.LearnPages[name].name,
-            url  : math.pagePath(true, name)
+            name   : "Lernen - " + math.Model.LearnPages[name].name,
+            url    : math.pagePath(true, name),
+            active : false
           }],
           statistics : App.currentUser.moduleStatistics(math)
         }
@@ -131,16 +184,18 @@
         });
       },
       showPractisePage : function(name){
+        name = name || "index";
         var math = App.Modules.mathematics;
-        math.navigationData = math.Controller.makeLinks(math.Model.PractisePages, false);
-        
+        math.navigationData = math.Controller.makeLinks(math.Model.PractisePages, name, false);
         math.whereAmIData = {
           links : [{
-            name : math.displayName,
-            url  : math.pagePath()
+            name   : math.displayName,
+            url    : math.pagePath(),
+            active : false
           },{
             name : "Üben - " + math.Model.PractisePages[name].name,
-            url  : math.pagePath(false, name)
+            url  : math.pagePath(false, name),
+            active : false
           }],
           statistics : App.currentUser.moduleStatistics(math)
         }
@@ -159,17 +214,20 @@
       showIndexPage : function(){
         var math = App.Modules.mathematics;
         math.navigationData = [{
-          name : "Lernen",
-          url  : math.pagePath(true, "index")
+          name   : "Lernen",
+          url    : math.pagePath(true, "index"),
+          active : false
         },{
-          name : "Üben",
-          url  : math.pagePath(false, "index")
+          name   : "Üben",
+          url    : math.pagePath(false, "index"),
+          active : false
         }];
         
         math.whereAmIData = {
           links : [{
-            name : "Mathematik",
-            url  : math.pagePath()
+            name   : "Mathematik",
+            url    : math.pagePath(),
+            active : false
           }],
           statistics : ""
         }
@@ -187,54 +245,47 @@
     Model : {
       LearnPages : {
         "index" : {
-          name : "Start",
-          depth: 0
+          name : "Start"
         },
         "page1" : {
-          name : "Alle von 9, den letzten von 10",
-          depth: 0
+          name : "Alle von 9, den letzten von 10"
         },
         "page2" : {
-          name : "Vertikal und kreuzweise",
-          depth: 0
+          name     : "Vertikal und kreuzweise",
+          backpage : "index"
         },
         "page2a" : {
-          name : "für einstellige Zahlen",
-          depth: 1
+          name  : "für einstellige Zahlen",
+          parent: "page2"
         },
         "page2b" : {
           name : "für Zahlen unter und nahe 100",
-          depth: 1
+          parent: "page2"
         },
         "page2c" : {
           name : "für Zahlen über und nahe 100",
-          depth: 1
+          parent: "page2"
         },
         "page2d" : {
           name : "für Summen kleiner Brüche",
-          depth: 1
+          parent: "page2"
         },
         "page3" : {
-          name : "Um 1 mehr als der davor",
-          depth: 0
+          name : "Um 1 mehr als der davor"
         },
         "page4" : {
-          name : "Multiplikation mit 11",
-          depth: 0
+          name : "Multiplikation mit 11"
         },
         "page5" : {
-          name : "Division durch 9",
-          depth: 0
+          name : "Division durch 9"
         }
       },
       PractisePages : {
         "index" : {
-          name : "Start",
-          depth: 0
+          name : "Start"
         },
         "page1" : {
           name     : "Alle von 9 und den letzten von 10",
-          depth    : 0,
           exercise : {
             figure1 : [10, 100, 1000],
             figure2 : [[0, 9], [0, 99], [0, 999]],
@@ -242,12 +293,12 @@
           }
         },
         "page2" : {
-          name : "Vertikal und Kreuzweise",
-          depth: 0
+          name     : "Vertikal und Kreuzweise",
+          backpage : "index"
         },
         "page2a" : {
           name     : "für einstellige Zahlen",
-          depth    : 1,
+          parent   : "page2",
           exercise : {
             figure1 : [[0, 10]],
             figure2 : [[0, 10]],
@@ -256,7 +307,7 @@
         },
         "page2b" : {
           name     : "für Zahlen unter und nahe 100",
-          depth    : 1,
+          parent   : "page2",
           exercise : {
             figure1 : [[85, 100]],
             figure2 : [[85, 100]],
@@ -265,7 +316,7 @@
         },
         "page2c" : {
           name     : "für Zahlen über und nahe 100",
-          depth    : 1,
+          parent   : "page2",
           exercise : {
             figure1 : [[100, 125]],
             figure2 : [[100, 125]],
@@ -274,7 +325,7 @@
         },
         "page2d" : {
           name     : "für Summen kleiner Brüche",
-          depth    : 1,
+          parent   : "page2",
           exercise : {
             figure1 : [[0, 10]],
             figure2 : [[0, 10]],
@@ -283,7 +334,6 @@
         },
         "page3" : {
           name     : "Um 1 mehr als dem davor",
-          depth    : 0,
           exercise : {
             figure1 : [5, 15, 25, 35, 45, 55, 65, 75, 85, 95],
             figure2 : "figure1",
@@ -292,7 +342,6 @@
         },
         "page4" : {
           name     : "Multiplikation mit 11",
-          depth    : 0,
           exercise : {
             figure1 : [[10, 99]],
             figure2 : [11],
@@ -301,7 +350,6 @@
         },
         "page5" : {
           name     : "Division durch 9",
-          depth    : 0,
           exercise : {
             figure1 : [[10, 1000]],
             figure2 : [9],

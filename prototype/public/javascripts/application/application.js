@@ -39,7 +39,7 @@ log = function(message){
     templates : {
       localLink: _.template("<a href='<%= url %>' onclick='App.Controller.evaluateHash(\"<%= url %>\");'><%= name %></a>"),
       whereami : _.template("<div>Du bist hier:</div> <% _.each(links, function(link) { %><div><%= App.View.templates.localLink(link) %></div><% }); %>  <% if (statistics) { %> <div><%= App.currentModule.statsTemplate({ statistics : statistics}) %></div> <% } %>"),
-      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li class='depth-<%= link.depth %>'><%= App.View.templates.localLink(link) %></li> <% if (arguments[0].subnav) { %><%= App.View.templates.linkList(arguments[0].subnav) %><% } %><% }); %> </ul>"),
+      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li class='<% if(link.active) {%>active<% } %>'><%= App.View.templates.localLink(link) %></li> <% if (arguments[0].subnav) { %><%= App.View.templates.linkList(arguments[0].subnav) %><% } %><% }); %> </ul>"),
       article  : _.template("<h2><%= title %></h2><p><%= body %></p>"),
       quickicon: _.template("<li <% if(item.enabled) { %> onclick=\"<%= item.action %>\" <% } %> class='ui-state-<% if(item.enabled){ %>default<% } else { %>error<% } %> ui-corner-all' title='<%= item.tiptip %>'><span class='ui-icon ui-icon-<%= item.icon %>'></span></li>"),
       quicknav : _.template("<ul> <% _.each(arguments[0], function(item) { %> <%= App.View.templates.quickicon({ item : item }) %> <% }); %> </ul>")
@@ -165,14 +165,15 @@ log = function(message){
       dialog.html("<iframe src='" + url + "' width='100%' height='95%'></iframe>");
       
       dialog.dialog({
+        title : url,
         modal : true,
         width : "90%",
         height : 600,
-        buttons : {
-          "Schliessen" : function(){
-            $(this).dialog("close");
-          }
-        },
+        //buttons : {
+        //  "Schliessen" : function(){
+        //    $(this).dialog("close");
+        //  }
+        //},
         close : function(){
           $("body #dialog").remove();
         }
@@ -224,7 +225,7 @@ log = function(message){
         } else {
           return App.Controller.pathFor(["app", this.name]);
         }
-      },
+      }
       // Add further module implementations that may be overridden with options here
     }, options);
     
