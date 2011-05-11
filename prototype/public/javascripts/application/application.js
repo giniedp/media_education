@@ -214,9 +214,9 @@ log = function(message){
       evaluateHash : function(args){
         log(args);
       },
-      render : function(){
-        return "FOO";
-      },
+//      render : function(){
+//        return "FOO";
+//      },
       pagePath : function(learnPage, pageName){
         if (learnPage === true){
           return App.Controller.pathFor(["app", this.name, "learn", pageName]);
