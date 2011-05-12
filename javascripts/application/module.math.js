@@ -225,7 +225,7 @@
         
         math.whereAmIData = {
           links : [{
-            name   : "Mathematik",
+            name   : math.displayName,
             url    : math.pagePath(),
             active : false
           }],
