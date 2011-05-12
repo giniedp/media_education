@@ -56,11 +56,11 @@
         var navContent = App.View.templates.linkList(voc.navigationData);
         var waiContent = App.View.templates.whereami(voc.whereAmIData);
         
-        $.get("modules/mathematics/learn/" + name + ".html", function(data){
-            App.Controller.swapContent(App.View.content, data);
+//        $.get("modules/vocabulary/learn/" + name + ".html", function(data){
+//            App.Controller.swapContent(App.View.content, data);
             App.Controller.swapContent(App.View.sidebar, navContent, 0);
             App.Controller.swapContent(App.View.info, waiContent, 0);
-        });
+//        });
       },
       showPractisePage : function(name){
         name = name || "index";
@@ -73,7 +73,7 @@
             url    : voc.pagePath(),
             active : false
           },{
-     //       name : "Üben - " + voc.Model.PractisePages[name].name,
+//            name : "Üben - " + voc.Model.PractisePages[name].name,
             name : "Üben ... bla",
             url  : voc.pagePath(false, name),
             active : false
@@ -84,13 +84,13 @@
         var navContent = App.View.templates.linkList(voc.navigationData);
         var waiContent = App.View.templates.whereami(voc.whereAmIData);
 
-        $.get("modules/mathematics/practise/" + name + ".html", function(data){
-            App.Controller.swapContent(App.View.content, data, function(){
-              App.Modules.mathematics.Controller.initializeExercises(name);
-            });
+//        $.get("modules/vocabulary/practise/" + name + ".html", function(data){
+//            App.Controller.swapContent(App.View.content, data, function(){
+//              App.Modules.mathematics.Controller.initializeExercises(name);
+//            });
             App.Controller.swapContent(App.View.sidebar, navContent, 0); 
             App.Controller.swapContent(App.View.info, waiContent, 0);         
-        });
+//        });
       },
       showIndexPage : function(){
         var voc = App.Modules.vocabulary;
@@ -116,7 +116,7 @@
         var navContent = App.View.templates.linkList(voc.navigationData);
         var waiContent = App.View.templates.whereami(voc.whereAmIData);
         
-        $.get("modules/mathematics/index.html", function(data){
+        $.get("modules/vocabulary/index.html", function(data){
             App.Controller.swapContent(App.View.content, data);
             App.Controller.swapContent(App.View.sidebar, navContent, 0);   
             App.Controller.swapContent(App.View.info, waiContent, 0);       
