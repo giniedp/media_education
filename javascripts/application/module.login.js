@@ -30,19 +30,20 @@
       //  return;
       //}
       
-      this.Controller.showIndexPage();
+//      this.Controller.showIndexPage();
     },
     Controller : {
       signIn : function(){
         App.Modules.login.Controller.facebookLogin();
       },
       facebookLogin : function(accessToken){
-        var appID = "198012633575807";
+        var appID = "103100459779625";
+	var redirect = "http://mitharas.de/schultrainer/index.html";
         if (!accessToken) {
           var path = 'https://www.facebook.com/dialog/oauth?';
           var queryParams = [
             'client_id=' + appID,
-            'redirect_uri=' + window.location,
+            'redirect_uri=' + redirect,
             'response_type=token'];
           var query = queryParams.join('&');
           var url = path + query;
