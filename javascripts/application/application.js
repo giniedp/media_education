@@ -58,12 +58,13 @@ log = function(message){
       return App.currentModule;
     },
     evaluateAppHash : function(current, hash){
-      if (current === "sign_in") {
-
-      } else if (current === "register") {
-
-      } else if (current === "profile") {
-
+      
+      var accessMatch = current.match(/^access_token/);
+      if (accessMatch !== null || 
+          (current === "sign_in") ||
+          (current === "register") ||
+          (current === "profile")){
+        App.Controller.pickModule("login").evaluateHash(hash, current);
       } else {
           var waiContent = App.View.templates.whereami({
             links : [{
@@ -89,19 +90,21 @@ log = function(message){
       
       hash = hash.replace(/.*\#/, "").split("/");
       
+      var enableModuleLink = true;
       var current = hash.shift();
       if (current === "app"){
         current = hash.shift();
         App.Controller.pickModule(current).evaluateHash(hash);
       } else {
         App.Controller.evaluateAppHash(current, hash);
+        enableModuleLink = false;
       }
       
       var iconContent = App.View.templates.quicknav([{
-        enabled : true,
+        enabled : enableModuleLink,
         tiptip  : "Zur Hauptseite des Moduls: " + App.currentModule.displayName,
         icon    : "folder-open",
-        action  : "alert('foo');"
+        action  : "App.Controller.evaluateHash('" + App.currentModule.pagePath() + "')"
       },{
         enabled : true,
         tiptip  : "Zur Hauptseite des Programms",
@@ -111,7 +114,7 @@ log = function(message){
         enabled : true,
         tiptip  : "Login / Profilseite",
         icon    : "person",
-        action  : "alert('foo');"
+        action  : "App.Controller.evaluateHash('#sign_in');"
       },{
         enabled : App.currentModule.hasHelpPage,
         tiptip  : (App.currentModule.helpTitle || (App.currentModule.hasHelpPage ? "Hilfe zur aktuellen Seite" : "Zu der aktuellen Seite ist keine Hilfe verfügbar")),
@@ -257,7 +260,9 @@ log = function(message){
   App.User = function(options){
     _.extend(this, { 
       name : I18n.t("app.user.guest_name"),
-      statistics : {}
+      statistics : {},
+      signedIn : false,
+      accessToken : null
       // Add further user implementations that may be overridden with options here
     }, options);
     
