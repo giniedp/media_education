@@ -59,7 +59,7 @@ log = function(message){
     },
     evaluateAppHash : function(current, hash){
       
-      var accessMatch = current.match(/^code/);
+      var accessMatch = current.match(/^access_token/);
       if (accessMatch !== null || 
           (current === "sign_in") ||
           (current === "register") ||

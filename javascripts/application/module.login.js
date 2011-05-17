@@ -11,7 +11,7 @@
       App.Controller.pickModule(this.name);
       var current = hash.shift();
       
-      var accessMatch = last.match(/^code/);
+      var accessMatch = last.match(/^access_token/);
       if (accessMatch !== null){
         this.Controller.facebookLogin(last);
       } else {
@@ -21,16 +21,6 @@
           this.Controller.facebookLogin();
         }
       }
-      //if (last)
-      //if (current === "learn"){
-      //  this.Controller.showLearnPage(hash.shift());
-      //  return;
-      //} else if (current === "practise"){
-      //  this.Controller.showPractisePage(hash.shift());
-      //  return;
-      //}
-      
-//      this.Controller.showIndexPage();
     },
     Controller : {
       signIn : function(){
@@ -38,7 +28,7 @@
       },
       facebookLogin : function(accessToken){
         var appID = "103100459779625";
-	var redirect = "http://mitharas.de/schultrainer/index.html";
+        var redirect = "http://mitharas.de/schultrainer/index.html";
         if (!accessToken) {
           var path = 'https://www.facebook.com/dialog/oauth?';
           var queryParams = [
@@ -51,8 +41,8 @@
           window.open(url);
         } else {
           var path = "https://graph.facebook.com/me?";
-          //this should be access_token already, api says we get the token...
-          var query = accessToken.replace("code", "access_token");
+//TODO split the access token ....
+          var query = accessToken;	//this is "access_token=xxx&expires..."
           var url = path + query;
           log("got some reply... token: '"+accessToken+"'");
           $.ajax({
