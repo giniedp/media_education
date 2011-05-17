@@ -46,18 +46,19 @@
             'response_type=token'];
           var query = queryParams.join('&');
           var url = path + query;
+          log("trying to login: '"+url+"'");
           window.open(url);
         } else {
           var path = "https://graph.facebook.com/me?";
-          var queryParams = [accessToken.replace("code", "access_token"), 'callback=displayUser'];
-          var query = queryParams.join('&');
+          //this should be access_token already, api says we get the token...
+          var query = accessToken.replace("code", "access_token");
           var url = path + query;
-          
+          log("got some reply... token: '"+accessToken+"'");
           $.ajax({
             url : url,
             success : function(data){
               
-              console.log(data);
+              log(data);
             }
           });
         }
