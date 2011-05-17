@@ -11,10 +11,9 @@
       App.Controller.pickModule(this.name);
       var current = hash.shift();
       
-      var accessMatch = last.match(/^access_token/);
+      var accessMatch = last.match(/^code/);
       if (accessMatch !== null){
-        var accessToken = last.substring(1);
-        this.Controller.facebookLogin(accessToken);
+        this.Controller.facebookLogin(last);
       } else {
         if (App.currentUser.signedIn){
           App.View.content.text("Eingeloggt");
@@ -50,7 +49,7 @@
           window.open(url);
         } else {
           var path = "https://graph.facebook.com/me?";
-          var queryParams = [accessToken, 'callback=displayUser'];
+          var queryParams = [accessToken.replace("code", "access_token"), 'callback=displayUser'];
           var query = queryParams.join('&');
           var url = path + query;
           
