@@ -213,6 +213,7 @@ log = function(message){
       hasHelpPage   : false,
       helpFunction  : "",
       whereAmIData  : {},
+      navigatable   : true,
       statsTemplate : _.template("Statistics: "),
       evaluateHash : function(args){
         log(args);
@@ -238,7 +239,11 @@ log = function(message){
   App.Module.extend = function(options){
     App.Modules[options.name] = new App.Module(options);;
     
-    var links = _.map(App.Modules, function(n){
+    var modules = _.select(App.Modules, function(item){
+      return item.navigatable;
+    });
+    
+    var links = _.map(modules, function(n){
       return { 
         url   : n.pagePath(), 
         name  : n.displayName 
