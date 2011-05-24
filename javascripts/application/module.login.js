@@ -64,6 +64,7 @@
       unsetFacebookUserData : function(callback){
         App.currentUser.name = I18n.t("app.user.guest_name");
         App.currentUser.signedIn = false;
+        App.currentUser.avatar = "/stylesheets/images/guest.png"
         
         callback = (callback || App.Modules.login.Controller.showIndexPage);
         if (typeof(callback) === "function"){
