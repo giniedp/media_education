@@ -55,7 +55,7 @@
           App.currentUser.signedIn = true;
           
           App.currentUser.facebookId = response.id;
-          App.currentUser.avatar = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
+          App.currentUser.avatar = "https://graph.facebook.com/" + response.id + "/picture?type=large";
           
           callback = (callback || App.Modules.login.Controller.showIndexPage);
           if (typeof(callback) === "function"){
