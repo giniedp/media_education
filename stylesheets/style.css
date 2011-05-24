@@ -32,6 +32,25 @@ h2 {
 h3, h4, h5, h6 {
   font-size: 120%; }
 
+#profile #avatar {
+  -moz-transform: rotate(-5deg);
+  -webkit-transform: rotate(-5deg);
+  background: none repeat scroll 0 0 #EEEEEE;
+  border: 1px solid #FFFFFF;
+  box-shadow: 0 2px 15px #333333;
+  float: left;
+  margin: 10px;
+  padding: 10px; }
+  #profile #avatar h3 {
+    color: black;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0; }
+
+#profile #info {
+  margin-left: 220px;
+  padding: 10px; }
+
 body #wrapper {
   width: 100%;
   height: 100%;
