@@ -11,78 +11,55 @@
       App.Controller.pickModule(this.name);
       var current = hash.shift();
       
-      var accessMatch = last.match(/^access_token/);
-      if (accessMatch !== null){
-        this.Controller.facebookLogin(last);
+      if (App.currentUser.signedIn){
+        App.Modules.login.Controller.showIndexPage();
       } else {
-        if (App.currentUser.signedIn){
-          App.View.content.text("Eingeloggt");
-        } else {
-          this.Controller.facebookLogin();
-        }
+        this.Controller.signIn();
       }
     },
     Controller : {
       signIn : function(){
-        App.Modules.login.Controller.facebookLogin();
+        FB.getLoginStatus(function(response) {
+          if (response.session) {
+            App.Modules.login.Controller.setFacebookUserData();
+          } else {
+            App.Modules.login.Controller.facebookLogin();
+          }
+        });
+      },
+      setFacebookUserData : function(callback){
+        FB.api('/me', function(response) {
+          App.currentUser.name = response.name;
+          App.currentUser.signedIn = true;
+          
+          callback = (callback || App.Modules.login.Controller.showIndexPage);
+          if (typeof(callback) === "function"){
+            callback.call();
+          }
+        });
+      },
+      unsetFacebookUserData : function(callback){
+        App.currentUser.name = I18n.t("app.user.guest_name");
+        App.currentUser.signedIn = false;
+        
+        callback = (callback || App.Modules.login.Controller.showIndexPage);
+        if (typeof(callback) === "function"){
+          callback.call();
+        }
       },
       facebookLogin : function(accessToken){
-        var appID = "103100459779625";
-        var redirect = "http://mitharas.de/schultrainer/index.html";
-        if (!accessToken) {
-          var path = 'https://www.facebook.com/dialog/oauth?';
-          var queryParams = [
-            'client_id=' + appID,
-            'redirect_uri=' + redirect,
-            'response_type=token'];
-          var query = queryParams.join('&');
-          var url = path + query;
-          log("trying to login: '"+url+"'");
-          window.open(url);
-        } else {
-          var path = "https://graph.facebook.com/me?";
-//TODO split the access token ....
-          var query = accessToken;	//this is "access_token=xxx&expires..."
-          var url = path + query;
-          log("got some reply... token: '"+accessToken+"'");
-          $.ajax({
-            url : url,
-            success : function(data){
-              
-              log(data);
-            }
-          });
-        }
+
+        FB.login(function(response) {
+          if (response.session) {
+            App.Modules.login.Controller.setFacebookUserData();
+          } else {
+            App.Modules.login.Controller.unsetFacebookUserData();
+          }
+        });
+
       },
       showIndexPage : function(){
-        var voc = App.Modules.vocabulary;
-        voc.navigationData = [{
-          name   : "Lernen",
-          url    : voc.pagePath(true, "index"),
-          active : false
-        },{
-          name   : "Üben",
-          url    : voc.pagePath(false, "index"),
-          active : false
-        }];
-        
-        voc.whereAmIData = {
-          links : [{
-            name   : voc.displayName,
-            url    : voc.pagePath(),
-            active : false
-          }],
-          statistics : ""
-        }
-        
-        var navContent = App.View.templates.linkList(voc.navigationData);
-        var waiContent = App.View.templates.whereami(voc.whereAmIData);
-        
-        $.get("modules/vocabulary/index.html", function(data){
-            App.Controller.swapContent(App.View.content, data);
-            App.Controller.swapContent(App.View.sidebar, navContent, 0);   
-            App.Controller.swapContent(App.View.info, waiContent, 0);       
-        });
+        log(App.currentUser);
       }
     },
   });

@@ -261,8 +261,7 @@ log = function(message){
     _.extend(this, { 
       name : I18n.t("app.user.guest_name"),
       statistics : {},
-      signedIn : false,
-      accessToken : null
+      signedIn : false
       // Add further user implementations that may be overridden with options here
     }, options);
     
