@@ -24,12 +24,12 @@
     },
     View : {
       profileTemplate : _.template("\
-      <div class='profile'>\
-        <div class='avatar'>\
+      <div id='profile'>\
+        <div id='avatar'>\
           <img src='<%= profile.avatar %>' alt='<%= profile.name %>'></img>\
           <h3><%= profile.name %></h3>\
         </div>\
-        <div class='info'>\
+        <div id='info'>\
           <p><%= profile.welcome %></p>\
         </div>\
         <div style=\"clear: both\"></div>\
