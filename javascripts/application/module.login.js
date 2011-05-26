@@ -24,12 +24,15 @@
     },
     View : {
       profileTemplate : _.template("\
-      <div class='profile'>\
-        <div class='avatar'><img src='<%= profile.avatar %>' alt='<%= profile.name %>'></img></div>\
-        <div class='info'>\
+      <div id='profile'>\
+        <div id='avatar'>\
+          <img src='<%= profile.avatar %>' alt='<%= profile.name %>'></img>\
           <h3><%= profile.name %></h3>\
+        </div>\
+        <div id='info'>\
           <p><%= profile.welcome %></p>\
         </div>\
+        <div style=\"clear: both\"></div>\
       </div>")
     },
     Controller : {
@@ -52,7 +55,7 @@
           App.currentUser.signedIn = true;
           
           App.currentUser.facebookId = response.id;
-          App.currentUser.avatar = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
+          App.currentUser.avatar = "https://graph.facebook.com/" + response.id + "/picture?type=large";
           
           callback = (callback || App.Modules.login.Controller.showIndexPage);
           if (typeof(callback) === "function"){
