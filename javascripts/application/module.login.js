@@ -75,13 +75,18 @@
         }
       },
       facebookLogin : function(accessToken){
-
         FB.login(function(response) {
           if (response.session) {
             App.Modules.login.Controller.setFacebookUserData();
           } else {
             App.Modules.login.Controller.unsetFacebookUserData();
           }
+        });
+
+      },
+      facebookLogout : function(){
+        FB.logout(function(response) {
+          App.Modules.login.Controller.unsetFacebookUserData();
         });
 
       },
@@ -124,7 +129,7 @@
                 name : App.currentUser.name,
                 welcome : data
               }
-            }), function() {$("#profile #info div button").button().click(function() { App.Modules.login.Controller.unsetFacebookUserData();})});
+            }), function() {$("#profile #info div button").button().click(function() { App.Modules.login.Controller.facebookLogout();})});
             App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
             App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
           });
