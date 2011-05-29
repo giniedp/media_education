@@ -69,6 +69,7 @@
         App.currentUser.name = I18n.t("app.user.guest_name");
         App.currentUser.signedIn = false;
         App.currentUser.avatar = "stylesheets/images/guest.png"
+        App.currentUser.facebookId = -1;
         //TODO reset stats, cookies, ...
         callback = (callback || App.Modules.login.Controller.showIndexPage);
         if (typeof(callback) === "function"){
@@ -95,8 +96,7 @@
         var module = Module();
         
         var modules = _.select(App.Modules, function(item){
-          // TODO: make a better filter
-          return item.navigatable;
+          return item.navigatable && App.currentUser.statistics[item.name];
         });
         
         module.navigationData = _.map(modules, function(item){

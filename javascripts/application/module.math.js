@@ -167,7 +167,7 @@
             url    : math.pagePath(),
             active : false
           },{
-            name   : "Lernen - " + math.Model.LearnPages[name].name,
+            name   : I18n.t("app.modules.math.learn") + " - " + math.Model.LearnPages[name].name,
             url    : math.pagePath(true, name),
             active : false
           }],
@@ -193,7 +193,7 @@
             url    : math.pagePath(),
             active : false
           },{
-            name : "Üben - " + math.Model.PractisePages[name].name,
+            name : I18n.t("app.modules.math.practice") + " - " + math.Model.PractisePages[name].name,
             url  : math.pagePath(false, name),
             active : false
           }],
@@ -214,11 +214,11 @@
       showIndexPage : function(){
         var math = App.Modules.mathematics;
         math.navigationData = [{
-          name   : "Lernen",
+          name   : I18n.t("app.modules.math.learn"),
           url    : math.pagePath(true, "index"),
           active : false
         },{
-          name   : "Üben",
+          name   : I18n.t("app.modules.math.practice"),
           url    : math.pagePath(false, "index"),
           active : false
         }];
