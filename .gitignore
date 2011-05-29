@@ -10,3 +10,4 @@ drehbuch/doc/latex/main.pdf
 *.properties.xml
 *.orig
 .DS_Store
+.sass-cache
