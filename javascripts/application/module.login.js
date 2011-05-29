@@ -16,11 +16,11 @@
       App.Controller.pickModule(this.name);
       var current = hash.shift();
       
-      if (App.currentUser.signedIn){
+  //    if (App.currentUser.signedIn){
         App.Modules.login.Controller.showIndexPage();
-      } else {
-        this.Controller.signIn();
-      }
+  //    } else {
+  //      this.Controller.signIn();
+   //   }
     },
     View : {
       profileTemplate : _.template("\
@@ -152,7 +152,7 @@
                 name : App.currentUser.name,
                 welcome : data
               }
-            }), function() {$("#profile #info div button").button().click(function() { App.Modules.login.Controller.facebookLogin();})});
+            }), function() {$("#profile #info div button").button().click(function() { App.Modules.login.Controller.signIn();})});
             App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
             App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
           });
