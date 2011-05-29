@@ -117,16 +117,18 @@
             statistics : ""
           }
           
-          App.Controller.swapContent(App.View.content, module.View.profileTemplate({
-            profile : {
-              avatar : App.currentUser.avatar,
-              name : App.currentUser.name,
-              welcome : "Yo, hello"
-            }
-          }));
-          App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
-          App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
-                    
+          $.get("modules/login/index-loggedin.html", function(data){
+            App.Controller.swapContent(App.View.content, module.View.profileTemplate({
+              profile : {
+                avatar : App.currentUser.avatar,
+                name : App.currentUser.name,
+                welcome : data
+              }
+            }), function() {$("#profile #info div button").button().click(function() { App.Modules.login.Controller.unsetFacebookUserData();})});
+            App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
+            App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
+          });
+
         } else {
           
           module.whereAmIData = {
@@ -138,15 +140,17 @@
             statistics : ""
           }
           
-          App.Controller.swapContent(App.View.content, module.View.profileTemplate({
-            profile : {
-              avatar : App.currentUser.avatar,
-              name : App.currentUser.name,
-              welcome : "Yo, hello"
-            }
-          }));
-          App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
-          App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
+          $.get("modules/login/index-loggedout.html", function(data){
+            App.Controller.swapContent(App.View.content, module.View.profileTemplate({
+              profile : {
+                avatar : App.currentUser.avatar,
+                name : App.currentUser.name,
+                welcome : data
+              }
+            }), function() {$("#profile #info div button").button().click(function() { App.Modules.login.Controller.facebookLogin();})});
+            App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
+            App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
+          });
         }
       }
     },
