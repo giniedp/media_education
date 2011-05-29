@@ -51,7 +51,6 @@ h3, h4, h5, h6 {
     text-align: center;
     padding: 0;
     max-width: 240px; }
-
 #profile #info {
   margin-left: 220px;
   padding: 10px; }
@@ -107,7 +106,7 @@ body #wrapper {
       height: 175px;
       float: left;
       padding: 50px;
-      margin-left: 0px;
+      margin-left: -0px;
       margin-top: -50px;
       background: url("images/note.png");
       background-repeat: no-repeat; }
@@ -189,3 +188,9 @@ body #wrapper {
 
 input {
   padding: 10px; }
+
+p {
+  margin-bottom: 1em; }
+
+.right {
+  float: right; }

@@ -30,7 +30,7 @@
           <h3><%= profile.name %></h3>\
         </div>\
         <div id='info'>\
-          <p><%= profile.welcome %></p>\
+          <%= profile.welcome %>\
         </div>\
         <div style=\"clear: both\"></div>\
       </div>")
@@ -68,7 +68,7 @@
         App.currentUser.name = I18n.t("app.user.guest_name");
         App.currentUser.signedIn = false;
         App.currentUser.avatar = "stylesheets/images/guest.png"
-        
+        //TODO reset stats, cookies, ...
         callback = (callback || App.Modules.login.Controller.showIndexPage);
         if (typeof(callback) === "function"){
           callback.call();
