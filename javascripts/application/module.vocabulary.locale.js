@@ -3,7 +3,9 @@ $.extend(true, I18n.dictionary, {
     app : {
       modules : {
         vocabulary : {
-          name : "Vokabeltrainer"
+          name : "Vokabeltrainer",
+          learn: "Lernen",
+          practice : "Üben"
         }
       }
     }
