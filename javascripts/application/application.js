@@ -6,7 +6,6 @@ log = function(message){
   return false;
 };
 
-
 (function(){
   
   // Initial Setup
@@ -122,7 +121,7 @@ $.ajaxSetup({
         enabled : App.currentModule.hasHelpPage,
         tiptip  : (App.currentModule.helpTitle || (App.currentModule.hasHelpPage ? "Hilfe zur aktuellen Seite" : "Zu der aktuellen Seite ist keine Hilfe verfügbar")),
         icon    : "help",
-        action  : App.currentModule.helpFunction
+        action  : (App.currentModule.hasHelpPage ? App.currentModule.helpFunction : "") 
       }]);
       
       App.Controller.swapContent(App.View.quicknav, iconContent, 0);
@@ -164,6 +163,21 @@ $.ajaxSetup({
         }
       });
       return content;
+    },
+    showDialog : function(content, options){
+      options = (options || {});
+      var dialog = $("<div id='dialog'/>");
+      $("body").append(dialog);
+      
+      dialog.dialog({
+        title : options.title,
+        modal : true,
+        width : options.width,
+        height : options.height,
+        close : function(){
+          $("body #dialog").remove();
+        }
+      }).html(content);
     },
     showIframe : function(url){
       var dialog = $("<div id='dialog'/>");

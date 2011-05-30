@@ -83,31 +83,59 @@
         
         return linkData;
       },
-      figureFor : function(range, fallback){
-        fallback = fallback || 0;
+      magicMapping : function(options){
+        var result = {};
         
-        if (typeof(range)==="string"){
-          return fallback;
-        }
-        
-        var allNumbers = false;
-        _.each(range, function(item){
-          allNumbers = allNumbers || _.isNumber(item);
+        _.each(options, function(data, key){
+          var value = 0;
+          var loopCounter = 100;
+          
+          while(loopCounter > 0){
+            loopCounter -= 1;
+            
+            // get a value from range, array, key or value
+            if (data.in_range){
+              value = data.in_range.min + Math.round((Math.random() * (data.in_range.max - data.in_range.min)));
+            } else if (data.in_array){
+              value = data.in_array[Math.round(Math.random() * (data.in_array.length - 1))];
+            } else if (data.key){
+              value = result[data.key];
+              break;
+            } else if (data.value){
+              value = data.value;
+              break;
+            }
+            
+            var valid = true;
+            if (data.lt){
+              var toCheck = (result[data.lt] || data.lt);
+              valid = valid && (value < toCheck)
+            }
+            if (data.lte){
+              var toCheck = (result[data.lte] || data.lte);
+              valid = valid && (value <= toCheck)
+            }
+            if (data.gt){
+              var toCheck = (result[data.gt] || data.gt);
+              valid = valid && (value > toCheck)
+            }
+            if (data.gte){
+              var toCheck = (result[data.gte] || data.gte);
+              valid = valid && (value >= toCheck)
+            }
+            
+            if (valid){
+              break;
+            }
+            if (loopCounter == 0){
+              value = 0;
+            }
+          }
+          
+          result[key] = value;
         });
         
-        if (allNumbers){
-          var index = Math.round((Math.random() * (range.length - 1)));
-          return range[index];
-        }
-        
-        // get a random array from all arrays
-        // [[0, 10], [20, 30]]
-        var index = Math.round((Math.random() * (range.length - 1)));
-        range = range[index];
-        
-        // get a random number inside range
-        //[0, 10]
-        return Math.round((Math.random() * (range[1] - range[0])));
+        return result;
       },
       validateExercise : function(container){
         var $this = container;
@@ -115,8 +143,24 @@
         var figure1 = $this.find(".figure-1").text();
         var figure2 = $this.find(".figure-2").text();
         var operator = $this.find(".operator").text();
-        var userResult = $this.find("input.result").val();
-        var result = eval([figure1, operator, figure2].join(" "));
+        
+        // get user result and format it to number with two decimals decimal
+        // example:
+        //    3 => 3,00
+        //    3,3 => 3,30
+        //    3,36 => 3,36
+        //    3,367 => 3,37
+        var userResult = $this.find("input.result").val().replace(",", ".").formatNumber(2, "", ",");
+        // substring the user result. get all but least decimal
+        // example:
+        //    3,30 => 3,3
+        //    3,36 => 3,3
+        userResult = userResult.toString().substring(0, userResult.toString().length - 1);
+        //  update the input value to display the user what value is used for valuation
+        $this.find("input.result").val(userResult);
+        // do the same with the result value
+        var result = eval([figure1, operator, figure2].join(" ")).formatNumber(2, "", ",");
+        result = result.toString().substring(0, result.toString().length - 1);
         
         var stats = App.currentUser.moduleStatistics(App.currentModule);
         
@@ -131,35 +175,52 @@
         var waiContent = App.View.templates.whereami(App.Modules.mathematics.whereAmIData);
         App.Controller.swapContent(App.View.info, waiContent, 0);
       },
-      initializeExercises : function(name){
+      addExercise : function(name){
         var math = App.Modules.mathematics;
-        var data = math.Model.PractisePages[name];
+        math.Model.lastExercise = (name || math.Model.lastExercise);
+        
+        var data = math.Model.PractisePages[math.Model.lastExercise];
         var content = App.View.content.find("#exercise");
-        content.fadeOut(500, function(){
-          $(this).html("").show();
-
-          if (!data.exercise){ return; }
         
-          for (var i = 0; i < 5; i++){
-            var obj = {};
-            
-            obj.figure1 = math.Controller.figureFor(data.exercise.figure1);
-            obj.figure2 = math.Controller.figureFor(data.exercise.figure2, obj.figure1);
-            obj.operator= data.exercise.operator[0];
-            
-            var temp = _.template('<div class="exercise"><span class="figure-1"><%= figure1 %></span><span class="operator"><%= operator %></span><span class="figure-2"><%= figure2 %></span><span class="equal-sign">=</span><input class="result" type="text" autocomplete="off" onchange="App.Modules.mathematics.Controller.validateExercise($(this).parent());"></input><span class="validation"></span></div>',obj);
-            $(temp).hide().appendTo(content).fadeIn(500);
+        if (!data.exercise){ return; }
+        var obj = math.Controller.magicMapping(data.exercise);
+
+        var temp = _.template(
+          '<div class="exercise">\
+             <span class="figure-1"><%= figure1 %></span>\
+             <span class="operator"><%= operator %></span>\
+             <span class="figure-2"><%= figure2 %></span>\
+             <span class="equal-sign">=</span>\
+             <input class="result" type="text" autocomplete="off"></input>\
+             <span class="validation"></span>\
+           </div>', obj);
+        
+        $(temp).hide().prependTo(content).fadeIn(500).find("input").bind("change", function(){
+          App.Modules.mathematics.Controller.validateExercise($(this).parent());
+          if ($(this).parent(".exercise").prev(".exercise").length == 0){
+            App.Modules.mathematics.Controller.addExercise(name);
           }
-
-          var temp = $("<a href='#' onclick=\"App.Modules.mathematics.Controller.initializeExercises('" + name + "'); return false;\">Neue Aufgaben</a>");
-          $(temp).hide().appendTo(content).fadeIn(500);          
-        });
+        }).focus();
         
-
+        var count = 5;
+        content.children().each(function(){
+          if (count <= 0){
+            $(this).detach();
+          } else {
+            $(this).css({
+              opacity : (count / 5.0)
+            });
+          }
+          count -= 1;
+        });
       },
       showLearnPage : function(name){
         name = name || "index";
         var math = App.Modules.mathematics;
+        math.hasHelpPage = false;
+        math.helpFunction = "";
+        math.helpTitle = undefined;
+        
         math.navigationData = math.Controller.makeLinks(math.Model.LearnPages, name, true);
         math.whereAmIData = {
           links : [{
@@ -186,6 +247,10 @@
       showPractisePage : function(name){
         name = name || "index";
         var math = App.Modules.mathematics;
+        math.hasHelpPage = true;
+        math.helpFunction = "App.Modules.mathematics.Controller.showPractiseHelpPage('" + name + "')";
+        math.helpTitle = undefined;
+        
         math.navigationData = math.Controller.makeLinks(math.Model.PractisePages, name, false);
         math.whereAmIData = {
           links : [{
@@ -205,14 +270,31 @@
 
         $.get("modules/mathematics/practise/" + name + ".html", function(data){
             App.Controller.swapContent(App.View.content, data, function(){
-              App.Modules.mathematics.Controller.initializeExercises(name);
+              App.Modules.mathematics.Controller.addExercise(name);
             });
             App.Controller.swapContent(App.View.sidebar, navContent, 0); 
             App.Controller.swapContent(App.View.info, waiContent, 0);         
         });
       },
+      showPractiseHelpPage : function(name){
+        log("modules/mathematics/learn/" + name + ".html");
+        $.get("modules/mathematics/learn/" + name + ".html", function(data){
+          
+          var content = $("<div>" + data + "</div>").find(".help");
+          App.Controller.showDialog(content, {
+            width : "90%",
+            height : 600,
+            modal : true,
+            title : "Hilfe"
+          });
+        });
+      },
       showIndexPage : function(){
         var math = App.Modules.mathematics;
+        math.hasHelpPage = false;
+        math.helpFunction = "";
+        math.helpTitle = undefined;
+        
         math.navigationData = [{
           name   : I18n.t("app.modules.math.learn"),
           url    : math.pagePath(true, "index"),
@@ -250,26 +332,26 @@
         "page1" : {
           name : "Alle von 9, letzten von 10"
         },
-        "page2" : {
-          name     : "Vertikal und kreuzweise",
-          backpage : "index"
-        },
-        "page2a" : {
-          name  : "Zahlen unter und nahe 10",
-          parent: "page2"
-        },
-        "page2b" : {
-          name  : "Zahlen über und nahe 10",
-          parent: "page2"
-        },
-        "page2c" : {
-          name : "Zahlen unter und nahe 100",
-          parent: "page2"
-        },
-        "page2d" : {
-          name : "Zahlen über und nahe 100",
-          parent: "page2"
-        },
+        //"page2" : {
+        //  name     : "Vertikal und kreuzweise",
+        //  backpage : "index"
+        //},
+        //"page2a" : {
+        //  name  : "Zahlen unter und nahe 10",
+        //  parent: "page2"
+        //},
+        //"page2b" : {
+        //  name  : "Zahlen über und nahe 10",
+        //  parent: "page2"
+        //},
+        //"page2c" : {
+        //  name : "Zahlen unter und nahe 100",
+        //  parent: "page2"
+        //},
+        //"page2d" : {
+        //  name : "Zahlen über und nahe 100",
+        //  parent: "page2"
+        //},
         "page3" : {
           name : "Einer mehr als der zuvor"
         },
@@ -287,74 +369,78 @@
         "page1" : {
           name     : "Alle von 9, letzten von 10",
           exercise : {
-            figure1    : [10, 100, 1000],
-            figure2    : [[0, 9], [0, 99], [0, 999]],
-            conditions : "figure1 >= figure2",
-            operator   : ["-"]
+            figure1 : {
+              in_array : [10, 100, 1000]
+            },
+            figure2 : {
+              in_range : { min : 0, max : 1000 },
+              lte : "figure1"
+            },
+            operator: { value : "-" }
           }
         },
-        "page2" : {
-          name     : "Vertikal und Kreuzweise",
-          backpage : "index"
-        },
-        "page2a" : {
-          name     : "Zahlen unter und nahe 10",
-          parent   : "page2",
-          exercise : {
-            figure1 : [[6, 10]],
-            figure2 : [[6, 10]],
-            operator: ["*"]
-          }
-        },
-        "page2b" : {
-          name     : "Zahlen über und nahe 10",
-          parent   : "page2",
-          exercise : {
-            figure1 : [[10, 15]],
-            figure2 : [[10, 15]],
-            operator: ["*"]
-          }
-        },
-        "page2c" : {
-          name     : "Zahlen unter und nahe 100",
-          parent   : "page2",
-          exercise : {
-            figure1 : [[90, 100]],
-            figure2 : [[90, 100]],
-            operator: ["*"]
-          }
-        },
-        "page2d" : {
-          name     : "Zahlen über und nahe 100",
-          parent   : "page2",
-          exercise : {
-            figure1 : [[100, 110]],
-            figure2 : [[100, 110]],
-            operator: ["*"]
-          }
-        },
+        //"page2" : {
+        //  name     : "Vertikal und Kreuzweise",
+        //  backpage : "index"
+        //},
+        //"page2a" : {
+        //  name     : "Zahlen unter und nahe 10",
+        //  parent   : "page2",
+        //  exercise : {
+        //    figure1 : { in_range : { min : 6, max : 10 } },
+        //    figure2 : { in_range : { min : 6, max : 10 } },
+        //    operator: { value : "*" }
+        //  }
+        //},
+        //"page2b" : {
+        //  name     : "Zahlen über und nahe 10",
+        //  parent   : "page2",
+        //  exercise : {
+        //    figure1 : { in_range : { min : 10, max : 15 } },
+        //    figure2 : { in_range : { min : 10, max : 15 } },
+        //    operator: { value : "*" }
+        //  }
+        //},
+        //"page2c" : {
+        //  name     : "Zahlen unter und nahe 100",
+        //  parent   : "page2",
+        //  exercise : {
+        //    figure1 : { in_range : { min : 90, max : 100 } },
+        //    figure2 : { in_range : { min : 90, max : 100 } },
+        //    operator: { value : "*" }
+        //  }
+        //},
+        //"page2d" : {
+        //  name     : "Zahlen über und nahe 100",
+        //  parent   : "page2",
+        //  exercise : {
+        //    figure1 : { in_range : { min : 100, max : 110 } },
+        //    figure2 : { in_range : { min : 100, max : 110 } },
+        //    operator: { value : "*" }
+        //  }
+        //},
         "page3" : {
           name     : "Einer mehr als der zuvor",
           exercise : {
-            figure1 : [5, 15, 25, 35, 45, 55, 65, 75, 85, 95],
-            figure2 : "figure1",
-            operator: ["*"]
+            figure1 : { in_array : [5, 15, 25, 35, 45, 55, 65, 75, 85, 95] },
+            figure2 : { key : "figure1" },
+            operator: { value : "*" }
           }
         },
         "page4" : {
           name     : "Multiplikation mit 11",
           exercise : {
-            figure1 : [[10, 99]],
-            figure2 : [11],
-            operator: ["*"]
+            figure1 : { in_range : { min : 10, max : 99 } },
+            figure2 : { value : 11 },
+            operator: { value : "*" }
           }
         },
         "page5" : {
           name     : "Division durch 9",
           exercise : {
-            figure1 : [[10, 99]],
-            figure2 : [9],
-            operator: ["/"]
+            figure1 : { in_range : { min : 10, max : 99 } },
+            figure2 : { value : 9 },
+            operator: { value : "/" }
           }
         }
       }
