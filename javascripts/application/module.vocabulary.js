@@ -130,10 +130,17 @@
         var obj = App.Modules.vocabulary.vocData[App.Modules.vocabulary.vocHandle];
         obj.id = App.Modules.vocabulary.vocHandle;
         App.Modules.vocabulary.vocHandle += 1;
-        var temp = _.template('<div class="exercise" id="<%= id %>"><%= origin %><input class="result" type="text" autocomplete="off" onchange="App.Modules.vocabulary.Controller.validateExercise($(this).parent());"></input><span class="validation"></span></div>',obj);
-        $(temp).hide().prependTo(content).fadeIn(500, function() {
+        var temp = _.template('<div class="exercise" id="<%= id %>"><%= origin %><input class="result" type="text" autocomplete="off"></input><span class="validation"></span></div>',obj);
+        
+        $(temp).hide().prependTo(content).fadeIn(500, function(){
           $('#exercise input.result')[0].focus();
-        });
+        }).find("input")
+        .bind("keydown", "return", function(){
+          $(this).trigger("evaluate");
+        })
+        .bind("evaluate", function(){
+          App.Modules.vocabulary.Controller.validateExercise($(this).parent());
+        }).focus();
       },
       validateExercise : function(container){
         var id = container.attr("id");

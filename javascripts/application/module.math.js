@@ -195,7 +195,11 @@
              <span class="validation"></span>\
            </div>', obj);
         
-        $(temp).hide().prependTo(content).fadeIn(500).find("input").bind("change", function(){
+        $(temp).hide().prependTo(content).fadeIn(500).find("input")
+        .bind("keydown", "return", function(){
+          $(this).trigger("evaluate");
+        })
+        .bind("evaluate", function(){
           App.Modules.mathematics.Controller.validateExercise($(this).parent());
           if ($(this).parent(".exercise").prev(".exercise").length == 0){
             App.Modules.mathematics.Controller.addExercise(name);
