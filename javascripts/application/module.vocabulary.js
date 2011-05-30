@@ -120,7 +120,7 @@
           var opac = (obj.css("opacity") || 1) - 0.2;
           if(opac > 0)
             obj.fadeTo("slow", opac);
-          if(opac == 0) {
+          if(opac <= 0) {
             obj.fadeTo("slow", 0, function() {
               $(this).remove();
             })
