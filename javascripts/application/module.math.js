@@ -277,7 +277,6 @@
         });
       },
       showPractiseHelpPage : function(name){
-        log("modules/mathematics/learn/" + name + ".html");
         $.get("modules/mathematics/learn/" + name + ".html", function(data){
           
           var content = $("<div>" + data + "</div>").find(".help");
