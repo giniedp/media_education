@@ -266,6 +266,7 @@ log = function(message){
     _.extend(this, { 
       name : I18n.t("app.user.guest_name"),
       avatar : "stylesheets/images/guest.png",
+      facebookId : -1,
       statistics : {},
       signedIn : false
       // Add further user implementations that may be overridden with options here
