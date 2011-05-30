@@ -75,8 +75,9 @@ $.ajaxSetup({
             }],
             statistics : ""
           });
+          
           $.get("app/index.html", function(data){
-            App.Controller.swapContent(App.View.content, data);
+            App.Controller.swapContent(App.View.content, "data");
             App.Controller.swapContent(App.View.sidebar, App.View.moduleList); 
             App.Controller.swapContent(App.View.info, waiContent);   
         });

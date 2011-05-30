@@ -282,7 +282,7 @@
             App.Controller.swapContent(App.View.info, waiContent, 0);
         });
       }
-    },
+    }
   });
   
 })();

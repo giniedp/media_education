@@ -1,11 +1,17 @@
 * {
   padding: 0px;
   margin: 0px;
-  border: 0px; }
+  border: 0px;
+  position: relative;
+  overflow: visible;
+  overflow-x: visible;
+  overflow-y: visible; }
 
 html {
   background: #fac000;
-  font: 15px Calibri,"Trebuchet MS",Verdana,sans-serif; }
+  font: 15px Calibri,"Trebuchet MS",Verdana,sans-serif;
+  width: 100%;
+  height: 100%; }
 
 a {
   color: white;
@@ -55,108 +61,114 @@ h3, h4, h5, h6 {
   margin-left: 220px;
   padding: 10px; }
 
-body #wrapper {
+body {
   width: 100%;
-  height: 100%;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  background: #fac000;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffe600), color-stop(1, #fac000));
-  background: -moz-linear-gradient(center top, #ffe600 0%, #fac000 100%) repeat scroll 0 0 #fac000;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffe600", endColorstr="#fac000"); }
-  body #wrapper #container {
-    margin: 0px auto auto;
-    width: 750px;
-    min-height: 600px;
-    border: 5px solid white;
-    overflow: visible;
-    border-radius: 6px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    background: #008df9;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #00a9ff), color-stop(1, #008df9));
-    background: -moz-linear-gradient(center top, #00a9ff 0%, #008df9 100%) repeat scroll 0 0 #008df9;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00a9ff", endColorstr="#008df9");
-    -moz-box-shadow: 0px 0px 5px #050505;
-    -webkit-box-shadow: 0px 0px 5px #050505;
-    box-shadow: 0px 0px 5px #050505; }
-    body #wrapper #container #left {
-      background: url("images/clip.png");
-      background-repeat: repeat-y;
-      position: relative;
-      left: -20px;
-      width: 60px;
-      height: 590px;
-      float: left; }
-    body #wrapper #container #middle {
-      width: 485px;
-      float: left;
-      min-height: 595px; }
-    body #wrapper #container #right {
-      width: 140px;
+  height: 100%; }
+  body #wrapper {
+    width: 100%;
+    height: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background: #fac000;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffe600), color-stop(1, #fac000));
+    background: -moz-linear-gradient(center top, #ffe600 0%, #fac000 100%) repeat scroll 0 0 #fac000;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffe600", endColorstr="#fac000"); }
+    body #wrapper #container {
+      margin: 0px auto auto;
+      width: 750px;
+      min-height: 600px;
+      border: 5px solid white;
       overflow: visible;
-      float: left;
-      min-height: 595px; }
-    body #wrapper #container #header {
-      width: 100%;
-      height: 200px;
-      float: left; }
-    body #wrapper #container #where-am-i {
-      width: 200px;
-      height: 175px;
-      float: left;
-      padding: 50px;
-      margin-left: -0px;
-      margin-top: -50px;
-      background: url("images/note.png");
-      background-repeat: no-repeat; }
-      body #wrapper #container #where-am-i a {
-        color: black; }
-      body #wrapper #container #where-am-i a:hover {
-        color: #888; }
-      body #wrapper #container #where-am-i #quicknav {
-        float: right;
-        clear: both; }
-      body #wrapper #container #where-am-i #info {
-        clear: both;
+      position: relative;
+      border-radius: 6px;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      background: #008df9;
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #00a9ff), color-stop(1, #008df9));
+      background: -moz-linear-gradient(center top, #00a9ff 0%, #008df9 100%) repeat scroll 0 0 #008df9;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00a9ff", endColorstr="#008df9");
+      -moz-box-shadow: 0px 0px 5px #050505;
+      -webkit-box-shadow: 0px 0px 5px #050505;
+      box-shadow: 0px 0px 5px #050505; }
+      body #wrapper #container #left {
+        background: url("images/clip.png");
+        background-repeat: repeat-y;
         position: relative;
-        top: 10px; }
-    body #wrapper #container #header h1 {
-      margin: 60px 0px 0px 20px;
-      padding: 0px;
-      color: white;
-      font-weight: bold;
-      font-size: 65px; }
-    body #wrapper #container #content {
-      width: 100%;
-      float: left; }
-    body #wrapper #container #sidebar {
-      margin-left: 10px;
-      width: 200px;
-      float: left; }
-      body #wrapper #container #sidebar ul li {
-        width: 225px;
-        height: 70px;
-        background: url("images/bookmark-default.png");
-        margin-left: -2px;
-        list-style: none;
-        text-align: center;
-        font-size: 13px; }
-        body #wrapper #container #sidebar ul li a {
-          display: block;
-          padding: 15px 5px;
-          text-decoration: none;
-          color: white;
-          font-weight: bold;
-          font-style: normal; }
-        body #wrapper #container #sidebar ul li a:hover {
-          color: yellow; }
-      body #wrapper #container #sidebar ul li:hover {
-        background: url("images/bookmark-hover.png"); }
-      body #wrapper #container #sidebar ul li.active {
-        background: url("images/bookmark-current.png"); }
-      body #wrapper #container #sidebar ul li:hover.active {
-        background: url("images/bookmark-current.png"); }
+        left: -20px;
+        width: 60px;
+        height: 590px;
+        float: left; }
+      body #wrapper #container #middle {
+        width: 485px;
+        float: left;
+        min-height: 595px; }
+      body #wrapper #container #right {
+        width: 205px;
+        position: relative;
+        overflow: visible;
+        float: left;
+        min-height: 595px; }
+      body #wrapper #container #header {
+        width: 100%;
+        height: 200px;
+        float: left; }
+      body #wrapper #container #where-am-i {
+        width: 200px;
+        height: 175px;
+        float: left;
+        padding: 50px;
+        margin-left: 0px;
+        margin-top: -50px;
+        position: relative;
+        background: url("images/note.png");
+        background-repeat: no-repeat; }
+        body #wrapper #container #where-am-i a {
+          color: black; }
+        body #wrapper #container #where-am-i a:hover {
+          color: #888; }
+        body #wrapper #container #where-am-i #quicknav {
+          float: right;
+          clear: both; }
+        body #wrapper #container #where-am-i #info {
+          clear: both;
+          position: relative;
+          top: 10px; }
+      body #wrapper #container #header h1 {
+        margin: 60px 0px 0px 20px;
+        padding: 0px;
+        color: white;
+        font-weight: bold;
+        font-size: 65px; }
+      body #wrapper #container #content {
+        width: 100%;
+        float: left; }
+      body #wrapper #container #sidebar {
+        margin-left: 10px;
+        width: 200px;
+        float: left; }
+        body #wrapper #container #sidebar ul li {
+          width: 225px;
+          height: 70px;
+          background: url("images/bookmark-default.png");
+          margin-left: -2px;
+          list-style: none;
+          text-align: center;
+          font-size: 13px; }
+          body #wrapper #container #sidebar ul li a {
+            display: block;
+            padding: 15px 5px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-style: normal; }
+          body #wrapper #container #sidebar ul li a:hover {
+            color: yellow; }
+        body #wrapper #container #sidebar ul li:hover {
+          background: url("images/bookmark-hover.png"); }
+        body #wrapper #container #sidebar ul li.active {
+          background: url("images/bookmark-current.png"); }
+        body #wrapper #container #sidebar ul li:hover.active {
+          background: url("images/bookmark-current.png"); }
 
 #quicknav li {
   cursor: pointer;
