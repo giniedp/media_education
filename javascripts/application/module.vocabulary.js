@@ -15,15 +15,35 @@
       App.Controller.pickModule(this.name);
       var current = hash.shift();
       
-      if (current === "learn"){
-        this.Controller.showLearnPage(hash.shift());
-        return;
-      } else if (current === "practise"){
-        this.Controller.showPractisePage(hash.shift());
-        return;
+      if (current === "test"){
+        this.Controller.showTestPage(hash.shift());
+      } else if (current === "dict"){
+        this.Controller.showDictionaryPage(hash.shift());
+      } else {
+        this.Controller.showIndexPage();
       }
-      
-      this.Controller.showIndexPage();
+      return;
+    },
+    pagePath : function(page, pageName){
+      if (page === 'test'){
+        return App.Controller.pathFor(["app", this.name, "test", pageName]);
+      } else if (page === 'dict'){
+        return App.Controller.pathFor(["app", this.name, "dict", pageName]);
+      } else {
+        return App.Controller.pathFor(["app", this.name]);
+      }
+    },
+    setNavigation : function(url) {
+      App.Modules.vocabulary.navigationData = [{
+          name   : I18n.t("app.modules.vocabulary.test"),
+          url    : this.pagePath('test', "index"),
+          active : url === 'test'
+        },{
+          name   : I18n.t("app.modules.vocabulary.dict"),
+          url    : this.pagePath('dict', "index"),
+          active : url === 'dict'
+        }];
+      return App.Modules.vocabulary.navigationData;
     },
     Controller : {
       //get array of vocabulary
@@ -143,11 +163,28 @@
         
         App.Modules.vocabulary.Controller.initializeExercises();
       },
-      showLearnPage : function(name){
-        name = name || "index";
+      initializeDictionary : function(){
         var voc = App.Modules.vocabulary;
-  //      voc.navigationData = math.Controller.makeLinks(voc.Model.LearnPages, name, true);
-        voc.navigationData = {},
+        
+        var content = App.View.content.find("#dictionary");
+        content.fadeOut(500, function(){
+          $(this).html("").show();
+
+          var temp = $('<input type="text" autocomplete="off" id="dict"></input><div id="autotarget"></div>');
+          $(temp).hide().appendTo(content).fadeIn(500, function() {
+            $( "#dict" ).autocomplete({
+              source: "modules/vocabulary/temp.txt",
+              minLength: 2,
+              select: function( event, ui ) {
+                var temp = _.template('<h3><%= ui.item.origin %></h3><p><% _.each(ui.item.translations, function(item) { %> <%= item %><br /><% }); %></p>', { ui : ui });
+                App.Controller.swapContent($('#autotarget'), temp);
+              }
+            });
+          });
+        });
+      },
+      showLearnPage : function(){
+        var voc = App.Modules.vocabulary;
         voc.whereAmIData = {
           links : [{
             name   : voc.displayName,
@@ -155,63 +192,77 @@
             active : false
           },{
             name   : I18n.t("app.modules.vocabulary.learn"),
-            url    : voc.pagePath(true, name),
+            url    : voc.pagePath(true, 'index'),
             active : false
           }],
           statistics : App.currentUser.moduleStatistics(voc)
         }
 
-        var navContent = App.View.templates.linkList(voc.navigationData);
+        var navContent = App.View.templates.linkList(voc.setNavigation('learn'));
         var waiContent = App.View.templates.whereami(voc.whereAmIData);
         
         $.get("modules/vocabulary/learn.html", function(data){
             App.Controller.swapContent(App.View.content, data, function(){
-              //App.Modules.vocabulary.Controller.initializeExercises(true);
+              //App.Modules.vocabulary.Controller.initializeExercises();
             });
             App.Controller.swapContent(App.View.sidebar, navContent, 0);
             App.Controller.swapContent(App.View.info, waiContent, 0);
         });
       },
-      showPractisePage : function(name){
-        name = name || "index";
+      showDictionaryPage : function(){
         var voc = App.Modules.vocabulary;
-   //    voc.navigationData = math.Controller.makeLinks(math.Model.PractisePages, name, false);
-        voc.navigationData = {},
         voc.whereAmIData = {
           links : [{
             name   : voc.displayName,
             url    : voc.pagePath(),
             active : false
           },{
-            name : I18n.t("app.modules.vocabulary.practice"),
-            url  : voc.pagePath(false, name),
+            name   : I18n.t("app.modules.vocabulary.dict"),
+            url    : voc.pagePath('dict', 'index'),
+            active : false
+          }],
+          statistics : ""
+        }
+
+        var navContent = App.View.templates.linkList(voc.setNavigation('dict'));
+        var waiContent = App.View.templates.whereami(voc.whereAmIData);
+        
+        $.get("modules/vocabulary/dict.html", function(data){
+            App.Controller.swapContent(App.View.content, data, function(){
+              App.Modules.vocabulary.Controller.initializeDictionary();
+            });
+            App.Controller.swapContent(App.View.sidebar, navContent, 0);
+            App.Controller.swapContent(App.View.info, waiContent, 0);
+        });
+      },
+      showTestPage : function(){
+        var voc = App.Modules.vocabulary;
+        voc.whereAmIData = {
+          links : [{
+            name   : voc.displayName,
+            url    : voc.pagePath(),
+            active : false
+          },{
+            name : I18n.t("app.modules.vocabulary.test"),
+            url  : voc.pagePath('test', "index"),
             active : false
           }],
           statistics : App.currentUser.moduleStatistics(voc)
         }
         
-        var navContent = App.View.templates.linkList(voc.navigationData);
+        var navContent = App.View.templates.linkList(voc.setNavigation('test'));
         var waiContent = App.View.templates.whereami(voc.whereAmIData);
 
-        $.get("modules/vocabulary/practice.html", function(data){
+        $.get("modules/vocabulary/test.html", function(data){
             App.Controller.swapContent(App.View.content, data, function(){
               App.Modules.vocabulary.Controller.initializeExercises();
             });
-            App.Controller.swapContent(App.View.sidebar, navContent, 0); 
-            App.Controller.swapContent(App.View.info, waiContent, 0);         
+            App.Controller.swapContent(App.View.sidebar, navContent, 0);
+            App.Controller.swapContent(App.View.info, waiContent, 0);
         });
       },
       showIndexPage : function(){
         var voc = App.Modules.vocabulary;
-        voc.navigationData = [{
-          name   : I18n.t("app.modules.vocabulary.learn"),
-          url    : voc.pagePath(true, "index"),
-          active : false
-        },{
-          name   : I18n.t("app.modules.vocabulary.practice"),
-          url    : voc.pagePath(false, "index"),
-          active : false
-        }];
         
         voc.whereAmIData = {
           links : [{
@@ -222,13 +273,13 @@
           statistics : ""
         }
         
-        var navContent = App.View.templates.linkList(voc.navigationData);
+        var navContent = App.View.templates.linkList(voc.setNavigation('index'));
         var waiContent = App.View.templates.whereami(voc.whereAmIData);
         
         $.get("modules/vocabulary/index.html", function(data){
             App.Controller.swapContent(App.View.content, data);
-            App.Controller.swapContent(App.View.sidebar, navContent, 0);   
-            App.Controller.swapContent(App.View.info, waiContent, 0);       
+            App.Controller.swapContent(App.View.sidebar, navContent, 0);
+            App.Controller.swapContent(App.View.info, waiContent, 0);
         });
       }
     },

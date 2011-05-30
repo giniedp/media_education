@@ -11,6 +11,9 @@ log = function(message){
   
   // Initial Setup
   // -------------
+$.ajaxSetup({
+  cache: false
+});
 
   // The top-level namespace. All public App classes and modules will be attached to this.
   var App = this.App = {};

@@ -5,7 +5,8 @@ $.extend(true, I18n.dictionary, {
         vocabulary : {
           name : "Vokabeltrainer",
           learn: "Lernen",
-          practice : "Üben"
+          test : "Vokabeltest",
+          dict : "Nachschlagewerk"
         }
       }
     }
