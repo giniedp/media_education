@@ -116,7 +116,12 @@
         var obj = App.Modules.vocabulary.vocData[App.Modules.vocabulary.vocHandle];
         obj.id = App.Modules.vocabulary.vocHandle;
         App.Modules.vocabulary.vocHandle += 1;
-        var temp = _.template('<div class="exercise" id="<%= id %>"><%= origin %><input class="result" type="text" autocomplete="off"></input><span class="validation"></span></div>',obj);
+        var temp = _.template(
+          '<div class="exercise" id="<%= id %>">\
+            <%= origin %>\
+            <input class="result" type="text" autocomplete="off"></input>\
+            <span class="validation"></span>\
+          </div>',obj);
         
         $(temp).hide().prependTo(content).fadeIn('slow').find("input")
         .bind("keydown", "return", function(){
