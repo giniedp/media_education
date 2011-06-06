@@ -5,6 +5,9 @@ log = function(message){
   }
   return false;
 };
+today = new Date();
+today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+today = today.getTime();
 
 (function(){
   
@@ -247,6 +250,10 @@ $.ajaxSetup({
         } else {
           return App.Controller.pathFor(["app", this.name]);
         }
+      },
+      plotStatistics : function(content){
+        var stats = App.currentUser.moduleStatistics(this.name, {allDates: true});
+        log(stats);
       }
       // Add further module implementations that may be overridden with options here
     }, options);
@@ -312,10 +319,19 @@ $.ajaxSetup({
     //this.someFunction = function(){ ... }
     
     this.moduleStatistics = function(module, options){
+      options = options || {};
       if (!this.statistics[module.name]){
-        this.statistics[module.name] = {};
+        this.statistics[module.name] = new Array();
       }
-      return this.statistics[module.name]
+      if(options.allDates || false)
+        return this.statistics[module.name];
+      else {
+        if (!this.statistics[module.name][today]){
+          this.statistics[module.name][today] = {};
+        }
+
+        return this.statistics[module.name][today];
+      }
     };
   };
   App.User.extend = function(options){
