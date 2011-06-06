@@ -200,7 +200,6 @@
         $(temp).hide().prependTo(content).fadeIn('slow').find("input")
         .bind("keydown", "return", function(){
           $(this).trigger("evaluate");
-          $(this).attr('disabled', 'disabled');
         })
         .bind("evaluate", function(){
           App.Modules.mathematics.Controller.validateExercise($(this).parent());
