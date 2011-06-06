@@ -185,6 +185,8 @@
         if (!data.exercise){ return; }
         var obj = math.Controller.magicMapping(data.exercise);
 
+        App.Modules.mathematics.fadeExercises(content);
+
         var temp = _.template(
           '<div class="exercise">\
              <span class="figure-1"><%= figure1 %></span>\
@@ -195,7 +197,7 @@
              <span class="validation"></span>\
            </div>', obj);
         
-        $(temp).hide().prependTo(content).fadeIn(500).find("input")
+        $(temp).hide().prependTo(content).fadeIn('slow').find("input")
         .bind("keydown", "return", function(){
           $(this).trigger("evaluate");
         })
@@ -205,18 +207,6 @@
             App.Modules.mathematics.Controller.addExercise(name);
           }
         }).focus();
-        
-        var count = 5;
-        content.children().each(function(){
-          if (count <= 0){
-            $(this).detach();
-          } else {
-            $(this).css({
-              opacity : (count / 5.0)
-            });
-          }
-          count -= 1;
-        });
       },
       showLearnPage : function(name){
         name = name || "index";

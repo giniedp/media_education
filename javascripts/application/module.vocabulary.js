@@ -111,21 +111,7 @@
         
         var content = App.View.content.find("#exercise");
         //fade and disable old exercises...
-        var exercises = content.find('.exercise');
-        for(var i = 0; i < exercises.length; i++) {
-          var obj = $(exercises[i]);
-        
-          var inp = obj.find("input.result")[0];
-          inp.disabled = true;
-          var opac = (obj.css("opacity") || 1) - 0.2;
-          if(opac > 0)
-            obj.fadeTo("slow", opac);
-          if(opac <= 0) {
-            obj.fadeTo("slow", 0, function() {
-              $(this).remove();
-            })
-          }
-        }
+        App.Modules.vocabulary.fadeExercises(content);
 
         var obj = App.Modules.vocabulary.vocData[App.Modules.vocabulary.vocHandle];
         obj.id = App.Modules.vocabulary.vocHandle;

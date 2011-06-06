@@ -253,6 +253,24 @@ $.ajaxSetup({
     
     // add further module implementation that may not be overridden here
     // this.someFunction = function(){ ... }
+    this.fadeExercises = function(content, count) {
+      var opacDiff = 1/5;
+      if(typeof(count) == 'number')
+        opacDiff = 1/count;
+        
+      var opacDiff = 1/5;
+      content.children().each(function(index, item){
+        var obj = $(item);
+        var inp = obj.find("input.result")[0];
+        inp.disabled = true;
+        var opac = (obj.css("opacity") || 1) - opacDiff;
+        if(opac > 0)
+          obj.fadeTo("slow", opac)
+        else {
+          obj.detach();
+        }
+      });
+    }
   };
   App.Module.extend = function(options){
     App.Modules[options.name] = new App.Module(options);;
