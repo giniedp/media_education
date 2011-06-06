@@ -150,7 +150,7 @@
         //    3,3 => 3,30
         //    3,36 => 3,36
         //    3,367 => 3,37
-        var userResult = $this.find("input.result").val().replace(",", ".").formatNumber(2, "", ",");
+        var userResult = $this.find("input.result").val().replace(",", ".").formatNumber(2, ",", ".");
         // substring the user result. get all but least decimal
         // example:
         //    3,30 => 3,3
@@ -159,7 +159,7 @@
         //  update the input value to display the user what value is used for valuation
         $this.find("input.result").val(userResult);
         // do the same with the result value
-        var result = eval([figure1, operator, figure2].join(" ")).formatNumber(2, "", ",");
+        var result = eval([figure1, operator, figure2].join(" ")).formatNumber(2, ",", ".");
         result = result.toString().substring(0, result.toString().length - 1);
         
         var stats = App.currentUser.moduleStatistics(App.currentModule);
@@ -198,6 +198,7 @@
         $(temp).hide().prependTo(content).fadeIn(500).find("input")
         .bind("keydown", "return", function(){
           $(this).trigger("evaluate");
+          $(this).attr('disabled', 'disabled');
         })
         .bind("evaluate", function(){
           App.Modules.mathematics.Controller.validateExercise($(this).parent());
@@ -226,6 +227,12 @@
         math.helpTitle = undefined;
         
         math.navigationData = math.Controller.makeLinks(math.Model.LearnPages, name, true);
+        math.navigationData = [{
+          name   : "Zurück",
+          url    : "#app/mathematics",
+          active : false
+        }].concat(math.navigationData);
+        
         math.whereAmIData = {
           links : [{
             name   : math.displayName,
@@ -256,6 +263,12 @@
         math.helpTitle = undefined;
         
         math.navigationData = math.Controller.makeLinks(math.Model.PractisePages, name, false);
+        math.navigationData = [{
+          name   : "Zurück",
+          url    : "#app/mathematics",
+          active : false
+        }].concat(math.navigationData);
+        
         math.whereAmIData = {
           links : [{
             name   : math.displayName,
@@ -299,6 +312,10 @@
         math.helpTitle = undefined;
         
         math.navigationData = [{
+          name   : "Zurück",
+          url    : "#index",
+          active : false
+        },{
           name   : I18n.t("app.modules.math.learn"),
           url    : math.pagePath(true, "index"),
           active : false
