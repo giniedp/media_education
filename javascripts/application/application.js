@@ -80,10 +80,10 @@ $.ajaxSetup({
           });
           
           $.get("app/index.html", function(data){
-            App.Controller.swapContent(App.View.content, "data");
+            App.Controller.swapContent(App.View.content, data);
             App.Controller.swapContent(App.View.sidebar, App.View.moduleList); 
             App.Controller.swapContent(App.View.info, waiContent);   
-        });
+          });
       }
     },
     evaluateHash : function(newHash){
@@ -107,11 +107,6 @@ $.ajaxSetup({
       }
       
       var iconContent = App.View.templates.quicknav([{
-        enabled : enableModuleLink,
-        tiptip  : "Zur Hauptseite des Moduls: " + App.currentModule.displayName,
-        icon    : "folder-open",
-        action  : "App.Controller.evaluateHash('" + App.currentModule.pagePath() + "')"
-      },{
         enabled : true,
         tiptip  : "Zur Hauptseite des Programms",
         icon    : "home",
