@@ -158,7 +158,8 @@ body {
         body #wrapper #container #sidebar ul li {
           width: 225px;
           height: 70px;
-          background: url("images/bookmark-default.png");
+          background: url("images/bookmarks.png");
+          background-position: 0px -70px;
           margin-left: -2px;
           list-style: none;
           text-align: center;
@@ -176,9 +177,11 @@ body {
           body #wrapper #container #sidebar ul li a:hover {
             color: yellow; }
         body #wrapper #container #sidebar ul li:hover {
-          background: url("images/bookmark-hover.png"); }
+          background: url("images/bookmarks.png");
+          background-position: 0px -140px; }
         body #wrapper #container #sidebar ul li.active {
-          background: url("images/bookmark-current.png"); }
+          background: url("images/bookmarks.png");
+          background-position: 0px 0px; }
           body #wrapper #container #sidebar ul li.active a:last-child {
             position: relative;
             top: -7px;
@@ -198,7 +201,7 @@ body {
             -webkit-box-shadow: 0px 0px 0px black;
             box-shadow: 0px 0px 0px black; }
         body #wrapper #container #sidebar ul li:hover.active {
-          background: url("images/bookmark-current.png"); }
+          background-position: 0px 0px; }
 
 #quicknav li {
   cursor: pointer;
