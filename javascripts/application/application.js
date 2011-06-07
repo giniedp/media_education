@@ -44,7 +44,7 @@ $.ajaxSetup({
     templates : {
       localLink: _.template("<a href='<%= url %>' onclick='App.Controller.evaluateHash(\"<%= url %>\");'><%= name %></a>"),
       whereami : _.template("<div>Du bist hier:</div> <% _.each(links, function(link) { %><div><%= App.View.templates.localLink(link) %></div><% }); %>  <% if (statistics) { %> <div><%= App.currentModule.statsTemplate({ statistics : statistics}) %></div> <% } %>"),
-      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li class='<% if(link.active) {%>active<% } %>'><%= App.View.templates.localLink(link) %></li> <% if (arguments[0].subnav) { %><%= App.View.templates.linkList(arguments[0].subnav) %><% } %><% }); %> </ul>"),
+      linkList : _.template("<ul> <% _.each(arguments[0], function(link) { %> <li class='<% if(link.active) {%>active<% } %>'><%= App.View.templates.localLink(link) %><% if (link.sublink) { %><%= App.View.templates.localLink(link.sublink) %><% } %>  </li> <% if (arguments[0].subnav) { %><%= App.View.templates.linkList(arguments[0].subnav) %><% } %><% }); %> </ul>"),
       article  : _.template("<h2><%= title %></h2><p><%= body %></p>"),
       quickicon: _.template("<li <% if(item.enabled) { %> onclick=\"<%= item.action %>\" <% } %> class='ui-state-<% if(item.enabled){ %>default<% } else { %>error<% } %> ui-corner-all' title='<%= item.tiptip %>'><span class='ui-icon ui-icon-<%= item.icon %>'></span></li>"),
       quicknav : _.template("<ul> <% _.each(arguments[0], function(item) { %> <%= App.View.templates.quickicon({ item : item }) %> <% }); %> </ul>")
@@ -106,7 +106,7 @@ $.ajaxSetup({
         enableModuleLink = false;
       }
       
-      var iconContent = App.View.templates.quicknav([{
+      var iconContent = [{
         enabled : true,
         tiptip  : "Zur Hauptseite des Programms",
         icon    : "home",
@@ -116,12 +116,24 @@ $.ajaxSetup({
         tiptip  : "Login / Profilseite",
         icon    : "person",
         action  : "App.Controller.evaluateHash('#sign_in');"
-      },{
-        enabled : App.currentModule.hasHelpPage,
-        tiptip  : (App.currentModule.helpTitle || (App.currentModule.hasHelpPage ? "Hilfe zur aktuellen Seite" : "Zu der aktuellen Seite ist keine Hilfe verfügbar")),
-        icon    : "help",
-        action  : (App.currentModule.hasHelpPage ? App.currentModule.helpFunction : "") 
-      }]);
+      }];
+      
+      if (enableModuleLink){
+        iconContent.push({
+          enabled : App.currentModule.hasHelpPage,
+          tiptip  : (App.currentModule.helpTitle || (App.currentModule.hasHelpPage ? "Hilfe zur aktuellen Seite" : "Zu der aktuellen Seite ist keine Hilfe verfügbar")),
+          icon    : "help",
+          action  : (App.currentModule.hasHelpPage ? App.currentModule.helpFunction : "") 
+        });
+      } else {
+        iconContent.push({
+          enabled : false,
+          tiptip  : "Zu der aktuellen Seite ist keine Hilfe verfügbar",
+          icon    : "help",
+          action  : ""
+        });
+      }
+      iconContent = App.View.templates.quicknav(iconContent);
       
       App.Controller.swapContent(App.View.quicknav, iconContent, 0);
     },
@@ -247,7 +259,7 @@ $.ajaxSetup({
         }
       },
       plotStatistics : function(content){
-        var stats = App.currentUser.moduleStatistics(this.name, {allDates: true});
+        var stats = App.currentUser.moduleStatistics(this, {allDates: true});
         log(stats);
       }
       // Add further module implementations that may be overridden with options here
@@ -256,19 +268,16 @@ $.ajaxSetup({
     // add further module implementation that may not be overridden here
     // this.someFunction = function(){ ... }
     this.fadeExercises = function(content, count) {
-      var opacDiff = 1/5;
-      if(typeof(count) == 'number')
-        opacDiff = 1/count;
-        
-      var opacDiff = 1/5;
+      var opacDiff = 1 / ( count || 5);
+      
       content.children().each(function(index, item){
         var obj = $(item);
         var inp = obj.find("input.result")[0];
         inp.disabled = true;
-        var opac = (obj.css("opacity") || 1) - opacDiff;
-        if(opac > 0)
+        var opac = obj.css("opacity") - opacDiff;
+        if(opac > 0) {
           obj.fadeTo("slow", opac)
-        else {
+        } else {
           obj.detach();
         }
       });
@@ -316,11 +325,12 @@ $.ajaxSetup({
     this.moduleStatistics = function(module, options){
       options = options || {};
       if (!this.statistics[module.name]){
-        this.statistics[module.name] = new Array();
+        this.statistics[module.name] = {};
       }
-      if(options.allDates || false)
+
+      if(options.allDates || false){
         return this.statistics[module.name];
-      else {
+      } else {
         if (!this.statistics[module.name][today]){
           this.statistics[module.name][today] = {};
         }

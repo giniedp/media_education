@@ -38,6 +38,13 @@
               url    : App.Modules.mathematics.pagePath(learn, key),
               active : false
             });
+            if (page.learnPage || page.practisePage){
+              linkData[linkData.length-1].sublink = {
+                name   : page.learnPage ? "Zur Lernseite" : "Zur Übung",
+                url    : App.Modules.mathematics.pagePath(!learn, page.learnPage || page.practisePage),
+                active : false
+              }
+            }
           }
         });
         
@@ -52,6 +59,13 @@
                 url    : App.Modules.mathematics.pagePath(learn, key),
                 active : name === key
               });
+              if (page.learnPage || page.practisePage){
+                linkData[linkData.length-1].sublink = {
+                  name   : page.learnPage ? "Zur Lernseite" : "Zur Übung",
+                  url    : App.Modules.mathematics.pagePath(!learn, page.learnPage || page.practisePage),
+                  active : false
+                }
+              }
             }
           });
           // add the parent page of current page as navigation item
@@ -247,9 +261,16 @@
       showPractisePage : function(name){
         name = name || "index";
         var math = App.Modules.mathematics;
-        math.hasHelpPage = true;
-        math.helpFunction = "App.Modules.mathematics.Controller.showPractiseHelpPage('" + name + "')";
-        math.helpTitle = undefined;
+        if (name == "index"){
+          math.hasHelpPage = false;
+          math.helpFunction = "";
+          math.helpTitle = undefined;                    
+        } else {
+          math.hasHelpPage = true;
+          math.helpFunction = "App.Modules.mathematics.Controller.showPractiseHelpPage('" + name + "')";
+          math.helpTitle = undefined;          
+        }
+
         
         math.navigationData = math.Controller.makeLinks(math.Model.PractisePages, name, false);
         math.navigationData = [{
@@ -339,7 +360,8 @@
           name : "Start"
         },
         "page1" : {
-          name : "Alle von 9, letzten von 10"
+          name : "Alle von 9, letzten von 10",
+          practisePage : "page1"
         },
         //"page2" : {
         //  name     : "Vertikal und kreuzweise",
@@ -362,13 +384,16 @@
         //  parent: "page2"
         //},
         "page3" : {
-          name : "Einer mehr als der zuvor"
+          name : "Einer mehr als der zuvor",
+          practisePage : "page3"
         },
         "page4" : {
-          name : "Multiplikation mit 11"
+          name : "Multiplikation mit 11",
+          practisePage : "page4"
         },
         "page5" : {
-          name : "Division durch 9"
+          name : "Division durch 9",
+          practisePage : "page5"
         }
       },
       PractisePages : {
@@ -377,6 +402,7 @@
         },
         "page1" : {
           name     : "Alle von 9, letzten von 10",
+          learnPage : "page1",
           exercise : {
             figure1 : {
               in_array : [10, 100, 1000]
@@ -430,6 +456,7 @@
         //},
         "page3" : {
           name     : "Einer mehr als der zuvor",
+          learnPage : "page3",
           exercise : {
             figure1 : { in_array : [5, 15, 25, 35, 45, 55, 65, 75, 85, 95] },
             figure2 : { key : "figure1" },
@@ -438,6 +465,7 @@
         },
         "page4" : {
           name     : "Multiplikation mit 11",
+          learnPage : "page4",
           exercise : {
             figure1 : { in_range : { min : 10, max : 99 } },
             figure2 : { value : 11 },
@@ -446,6 +474,7 @@
         },
         "page5" : {
           name     : "Division durch 9",
+          learnPage : "page5",
           exercise : {
             figure1 : { in_range : { min : 10, max : 99 } },
             figure2 : { value : 9 },
