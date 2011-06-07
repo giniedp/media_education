@@ -280,6 +280,15 @@ body {
   }
 }
 
+#graph {
+  width:450px;
+  height:200px;
+  display: none;
+  * {
+    position: static;
+  }
+}
+
 input {
   padding: 10px;
 }

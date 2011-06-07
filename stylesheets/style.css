@@ -228,6 +228,13 @@ body {
       -webkit-box-shadow: 3px 3px 4px #050505 inset;
       box-shadow: 3px 3px 4px #050505 inset; }
 
+#graph {
+  width: 450px;
+  height: 200px;
+  display: none; }
+  #graph * {
+    position: static; }
+
 input {
   padding: 10px; }
 

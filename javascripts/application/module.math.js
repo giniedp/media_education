@@ -348,7 +348,13 @@
         var waiContent = App.View.templates.whereami(math.whereAmIData);
         
         $.get("modules/mathematics/index.html", function(data){
-            App.Controller.swapContent(App.View.content, data);
+            App.Controller.swapContent(App.View.content, data, 
+              function(){
+                var graph = $("#graph");
+                if(graph.length == 1 && App.currentUser.statistics[App.Modules.mathematics.name]){
+                  App.Modules.mathematics.plotStatistics(graph);
+                }
+              });
             App.Controller.swapContent(App.View.sidebar, navContent, 0);   
             App.Controller.swapContent(App.View.info, waiContent, 0);       
         });

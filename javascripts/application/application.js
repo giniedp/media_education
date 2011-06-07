@@ -260,7 +260,29 @@ $.ajaxSetup({
       },
       plotStatistics : function(content){
         var stats = App.currentUser.moduleStatistics(this, {allDates: true});
-        log(stats);
+        var correct = new Array(); var wrong = new Array();
+        var min; var max;
+        _.each(stats,
+            function(item, key){
+                if(!min || min > key)
+                    min = key;
+                if(!max || max < key)
+                    max = key;
+                correct.push(new Array(parseInt(key), item.correctAnswers || 0));
+                wrong.push(new Array(parseInt(key), item.wrongAnswers || 0));
+            });
+        //TODO remove or bundle old...
+        content.fadeIn('fast', function(){
+          $.plot(content, 
+            [{ label: "correct", data: correct}, { label: "wrong", data: wrong} ], 
+            { xaxis: {
+                mode: "time",
+                minTickSize: [1, "day"]},
+              series: {
+                lines: { show: true, fill: true, steps: false },
+                points: { show: true }
+              }
+            });});
       }
       // Add further module implementations that may be overridden with options here
     }, options);
