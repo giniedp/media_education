@@ -202,8 +202,8 @@ body {
             font-size: 13px;
             a{
               font-weight: bold;
-              font-style: normal;              
-              text-decoration: none;            
+              font-style: normal;
+              text-decoration: none;
               color: white;
             }
             a:last-child{
@@ -233,6 +233,7 @@ body {
               @include shadow(0px, 2px, 3px, #333);
             }
             a:first-child {
+              position: static;
               background: transparent;
               border: 0px;
               margin: 0px;
