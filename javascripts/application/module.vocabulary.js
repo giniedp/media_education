@@ -172,6 +172,9 @@
               source: "http://schulapi.cnlpete.de/dictionary.php",
               dataType: 'jsonp',
               minLength: 2,
+              parse: function(data) {
+                return data;
+              },
               select: function( event, ui ) {
                 var temp = _.template('<h3><%= ui.item.origin %></h3><p><% _.each(ui.item.translations, function(item) { %> <%= item %><br /><% }); %></p>', { ui : ui });
                 App.Controller.swapContent($('#autotarget'), temp);
