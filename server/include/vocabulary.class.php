@@ -37,8 +37,7 @@ WHERE v.lang='de'
   }
   
   function getData() {
-    return array('label' => $this->word." (".$this->language.")",
-      'origin' => $this->word, 
+    return array('origin' => $this->word, 
       'language' => $this->language, 
       'translations' => $this->translations,
       'translationLanguage' => $this->translationLanguage);

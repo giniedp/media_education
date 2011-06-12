@@ -1,6 +1,0 @@
-[{
-  "label" : "Banane",
-  "origin"  : "die Banane",
-  "lang"    : "en",
-  "translations" : ["banana"]
-}]
