@@ -168,11 +168,9 @@
 
           var temp = $('<input type="text" autocomplete="off" id="dict"></input><div id="autotarget"></div>');
           $(temp).hide().appendTo(content).fadeIn(500, function() {
-            $.ajaxSetup({
-              dataType: 'json'
-            });
             $( "#dict" ).autocomplete({
               source: "http://schulapi.cnlpete.de/dictionary.php",
+              dataType: 'jsonp',
               minLength: 2,
               select: function( event, ui ) {
                 var temp = _.template('<h3><%= ui.item.origin %></h3><p><% _.each(ui.item.translations, function(item) { %> <%= item %><br /><% }); %></p>', { ui : ui });
