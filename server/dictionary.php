@@ -3,6 +3,7 @@
 	
   header('Cache-Control: no-cache, must-revalidate');
   header('Content-type: application/json');
+  header('Access-Control-Allow-Origin: *');
 
   $sim = trim($_GET['term']?$_GET['term']:$_POST['term']);
   if (strlen($sim) > 2) {
