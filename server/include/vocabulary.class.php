@@ -43,16 +43,38 @@ WHERE v.lang='de'
       'translationLanguage' => $this->translationLanguage);
   }
   
-  static function getVocabularies($lang, $targetLang) {
+  static function getVocabularies($lang, $targetLang, $random) {
+    if($random) {
+      $maxid = DB::queryAssocAtom("SELECT MAX(id) AS max FROM vocabulary");
+      $maxid = $maxid['max'];
+      Log::debug("maxid: ".$maxid);
+      
+      //get random ids...
+      $randomIds = Array();
+      $max = $maxid['max']>2?2:$maxid['max'];
+      while (count($randomIds) < $max) {
+        $x = rand(1,$maxid['max']);
+        $found = false;
+        for($i=0; $i<count($randomIds); $i++)
+          if($randomIds[$i] == $x)
+            $found = true;
+        if(!$found)
+          $randomIds[] = $x;
+      }
+      Log::debug("randomids: ".implode(",", $randomIds));
+      $where = "AND v.id IN (". implode(",", $randomIds). ")";
+    }
+    
+    
     $sql = "SELECT v.id AS id, v.voc AS origin, vv.voc AS translation FROM `vocabulary` v 
 JOIN translations t ON t.origin=v.id 
 JOIN vocabulary vv ON vv.id=t.translation 
-WHERE v.lang='".$lang."' AND vv.lang='".$targetLang."'
+WHERE v.lang='".$lang."' AND vv.lang='".$targetLang."' ".$where."
 UNION
 SELECT v.id AS id, v.voc AS origin, vv.voc AS translation FROM `vocabulary` v 
 JOIN translations t ON t.translation=v.id 
 JOIN vocabulary vv ON vv.id=t.origin 
-WHERE v.lang='".$lang."' AND vv.lang='".$targetLang."';";
+WHERE v.lang='".$lang."' AND vv.lang='".$targetLang."' ".$where.";";
 
   //TODO order
   //1. query

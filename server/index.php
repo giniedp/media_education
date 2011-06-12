@@ -1,9 +1,12 @@
 <?php
 	require_once('inc.global.php');
 
-  header('Cache-Control: no-cache, must-revalidate');
-  header('Content-type: application/json');
-  header('Access-Control-Allow-Origin: *');
+  $debug = $_GET['debug'] == 'true';
+  if(!$debug) {
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Content-type: application/json');
+    header('Access-Control-Allow-Origin: *');
+  }
 
   $apicall = $_GET['func']?$_GET['func']:$_POST['func'];
   switch ($apicall) {
@@ -21,9 +24,22 @@
       }
       break;
     
+    case 'practice':
+      $vocs = Array();
+      $vocs['vocabulary'] = Array();
+      foreach (Vocabulary::getVocabularies('de','en',true) as $voc) {
+        $vocs['vocabulary'][] = $voc->getData();
+      }
+
+      echo json_encode($vocs);
+      break;
+    
     default:
       print_r($_GET);
       break;
   
   }
+  
+  if ($debug)
+    print_r(Log::getInstance()->getdebugMsg());
 ?>
