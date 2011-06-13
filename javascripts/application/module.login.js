@@ -49,9 +49,9 @@
     Controller : {
       getStatsPath : function(module){
         if (typeof(module) === "string")  //FIXME this.name seems undefined .. why?
-          return App.Controller.pathFor(["app", "sign_in", module]);
+          return App.Controller.pathFor(["sign_in", module]);
         else
-          return App.Controller.pathFor(["app", "sign_in", module.name]);
+          return App.Controller.pathFor(["sign_in", module.name]);
       },
       signIn : function(){
         FB.getLoginStatus(function(response) {
