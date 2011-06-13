@@ -27,7 +27,11 @@
     case 'practice':
       $vocs = Array();
       $vocs['vocabulary'] = Array();
-      foreach (Vocabulary::getVocabularies('de','en',true) as $voc) {
+      $realvocs;
+      do {
+        $realvocs = Vocabulary::getVocabularies('de','en',true);
+      while ($realvocs == NULL);
+      foreach ($realvocs as $voc) {
         $vocs['vocabulary'][] = $voc->getData();
       }
 

@@ -66,15 +66,8 @@ WHERE v.lang='de'
     }
     
     
-    $sql = "SELECT v.id AS id, v.voc AS origin, vv.voc AS translation FROM `vocabulary` v 
-JOIN translations t ON t.origin=v.id 
-JOIN vocabulary vv ON vv.id=t.translation 
-WHERE v.lang='".$lang."' AND vv.lang='".$targetLang."' ".$where."
-UNION
-SELECT v.id AS id, v.voc AS origin, vv.voc AS translation FROM `vocabulary` v 
-JOIN translations t ON t.translation=v.id 
-JOIN vocabulary vv ON vv.id=t.origin 
-WHERE v.lang='".$lang."' AND vv.lang='".$targetLang."' ".$where.";";
+    $sql = "SELECT * FROM `trans` ".
+      "WHERE lang='".$lang."' AND translationLanguage='".$targetLang."';";
 
   //TODO order
   //1. query
@@ -101,17 +94,31 @@ WHERE v.lang='".$lang."' AND vv.lang='".$targetLang."' ".$where.";";
   //4. return
 		return $vocs;
   }
+  
+  static function createView() {
+    $sql = "CREATE VIEW `trans` AS 
+select `v`.`id` AS `id`,`v`.`voc` AS `origin`,`v`.`lang` AS `lang`,`vv`.`voc` AS `translation`,`vv`.`lang` AS `translationLanguage` 
+from ((`vocabulary` `v` 
+join `translations` `t` on((`t`.`origin` = `v`.`id`))) 
+join `vocabulary` `vv` on((`vv`.`id` = `t`.`translation`))) 
+union 
+select `v`.`id` AS `id`,`v`.`voc` AS `origin`,`v`.`lang` AS `lang`,`vv`.`voc` AS `translation`,`vv`.`lang` AS `translationLanguage` 
+from ((`vocabulary` `v` 
+join `translations` `t` on((`t`.`translation` = `v`.`id`))) 
+join `vocabulary` `vv` on((`vv`.`id` = `t`.`origin`))) 
+order by `origin`;";
+
+    $db = DB::getInstance();
+    $db->begin();
+    if($db->sql_query("DROP VIEW `trans`;") && $db->sql_query($sql))
+      $db->commit();
+    else
+      $db->rollback();
+  }
 
   static function getSimilarVocabularies($sim) {
-    $sql = "SELECT v.id AS id, v.voc AS origin, v.lang AS language, vv.voc AS translation, vv.lang AS translationLanguage FROM `vocabulary` v 
-JOIN translations t ON t.origin=v.id 
-JOIN vocabulary vv ON vv.id=t.translation 
-WHERE v.voc LIKE '%".$sim."%'
-UNION
-SELECT v.id AS id, v.voc AS origin, v.lang AS language, vv.voc AS translation, vv.lang AS translationLanguage FROM `vocabulary` v 
-JOIN translations t ON t.translation=v.id 
-JOIN vocabulary vv ON vv.id=t.origin 
-WHERE v.voc LIKE '%".$sim."%';";
+    $sql = "SELECT * FROM `trans` ".
+      "WHERE origin LIKE '%".$sim."%';";
 
   //TODO order
   //1. query
