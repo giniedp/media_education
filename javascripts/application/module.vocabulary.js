@@ -61,32 +61,9 @@
         
         callback = (callback || App.Modules.vocabulary.Controller.appendVocData);
         if (typeof(callback) === "function"){
-            callback.call(this, { vocabulary : [{
-            origin  : "Hello",
-            lang    : "de",
-            translations : ["Hallo"],
-            correctGuesses : 2
-          },{
-            origin  : "die Banane",
-            lang    : "en",
-            translations : ["banana"],
-            correctGuesses : 1
-          },{
-            origin  : "der Apfel",
-            lang    : "en",
-            translations : ["apple"],
-            correctGuesses : 0
-          },{
-            origin  : "das Haus",
-            lang    : "en",
-            translations : ["house"],
-            correctGuesses : 0
-          },{
-            origin  : "die Wohnung",
-            lang    : "en",
-            translations : ["apartment", "accommodation", "flat", "residence"],
-            correctGuesses : 0
-          }]});
+          $.get("http://schulapi.cnlpete.de/index.php?func=practice&ordered=".$ordered, function(){
+              callback.call(this, data);
+            });
         }
         
         //TODO server logic + userid ...
