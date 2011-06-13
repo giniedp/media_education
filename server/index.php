@@ -30,7 +30,7 @@
       $realvocs;
       do {
         $realvocs = Vocabulary::getVocabularies('de','en',true);
-      while ($realvocs == NULL);
+      while (!$realvocs);
       foreach ($realvocs as $voc) {
         $vocs['vocabulary'][] = $voc->getData();
       }

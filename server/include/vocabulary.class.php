@@ -45,29 +45,25 @@ WHERE v.lang='de'
   
   static function getVocabularies($lang, $targetLang, $random) {
     if($random) {
-      $maxid = DB::queryAssocAtom("SELECT MAX(id) AS max FROM vocabulary");
-      $maxid = $maxid['max'];
-      Log::debug("maxid: ".$maxid);
-      
-      //get random ids...
-      $randomIds = Array();
-      $max = $maxid['max']>2?2:$maxid['max'];
-      while (count($randomIds) < $max) {
-        $x = rand(1,$maxid['max']);
-        $found = false;
-        for($i=0; $i<count($randomIds); $i++)
-          if($randomIds[$i] == $x)
-            $found = true;
-        if(!$found)
-          $randomIds[] = $x;
+      $sqlids = "SELECT DISTINCT (id)
+FROM `trans`
+WHERE lang = 'de'
+AND translationLanguage = 'en'
+ORDER BY RAND() LIMIT 5";
+      $ids = DB::queryAssoc($sqlids);
+      if ($ids == null || count($ids) == 0) {
+        Log::debug("sql statement returned no ids match");
+        return false; // id(s) not found
       }
+      $randomIds = Array();
+      foreach($ids as $id)
+        $randomIds[] = $id['id'];
       Log::debug("randomids: ".implode(",", $randomIds));
-      $where = "AND v.id IN (". implode(",", $randomIds). ")";
+      $where = "AND id IN (". implode(",", $randomIds). ")";
     }
     
-    
     $sql = "SELECT * FROM `trans` ".
-      "WHERE lang='".$lang."' AND translationLanguage='".$targetLang."';";
+      "WHERE lang='".$lang."' AND translationLanguage='".$targetLang."' ".$where.";";
 
   //TODO order
   //1. query
