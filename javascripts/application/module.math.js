@@ -89,7 +89,7 @@
         if (page.backpage || page.parent){
           var key = page.backpage || page.parent.backpage;
           linkData = [{
-            name   : "Zurück",
+            name   : I18n.t("app.modules.math.back"),
             url    : App.Modules.mathematics.pagePath(learn, key),
             active : false
           }].concat(linkData);
@@ -231,8 +231,8 @@
         
         math.navigationData = math.Controller.makeLinks(math.Model.LearnPages, name, true);
         math.navigationData = [{
-          name   : "Zurück",
-          url    : "#app/mathematics",
+          name   : I18n.t("app.modules.math.back"),
+          url    : math.pagePath(),
           active : false
         }].concat(math.navigationData);
         
@@ -274,8 +274,8 @@
         
         math.navigationData = math.Controller.makeLinks(math.Model.PractisePages, name, false);
         math.navigationData = [{
-          name   : "Zurück",
-          url    : "#app/mathematics",
+          name   : I18n.t("app.modules.math.back"),
+          url    : math.pagePath(),
           active : false
         }].concat(math.navigationData);
         
@@ -322,8 +322,8 @@
         math.helpTitle = undefined;
         
         math.navigationData = [{
-          name   : "Zurück",
-          url    : "#index",
+          name   : I18n.t("app.modules.math.back")
+          url    : App.Controller.pathFor(["index"]),
           active : false
         },{
           name   : I18n.t("app.modules.math.learn"),
