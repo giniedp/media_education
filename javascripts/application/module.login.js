@@ -48,9 +48,10 @@
     },
     Controller : {
       getStatsPath : function(module){
-        // TODO: return statistic path for module
-        return App.Controller.pathFor(["app", this.name, module]);
-        return Module().pagePath();
+        if (typeof(module) === "string")
+          return App.Controller.pathFor(["app", this.name, module]);
+        else
+          return App.Controller.pathFor(["app", this.name, module.name]);
       },
       signIn : function(){
         FB.getLoginStatus(function(response) {
