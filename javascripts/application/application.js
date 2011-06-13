@@ -74,7 +74,7 @@ $.ajaxSetup({
           var waiContent = App.View.templates.whereami({
             links : [{
               name : "Hauptseite",
-              url  : "#index"
+              url  : App.Controller.pathFor(["index"])
             }],
             statistics : ""
           });
