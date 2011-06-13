@@ -36,7 +36,7 @@
     setNavigation : function(url) {
       App.Modules.vocabulary.navigationData = [{
           name   : I18n.t("app.modules.vocabulary.back"),
-          url    : this.pagePath(),
+          url    : url=='index'?App.Controller.pathFor(["index"]):this.pagePath(),
           active : false
         },{
           name   : I18n.t("app.modules.vocabulary.test"),
