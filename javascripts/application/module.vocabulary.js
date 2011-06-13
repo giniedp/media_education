@@ -65,7 +65,7 @@
         
         callback = (callback || App.Modules.vocabulary.Controller.appendVocData);
         if (typeof(callback) === "function"){
-          $.get("http://schulapi.cnlpete.de/index.php?func=practice&ordered=".$ordered, function(){
+          $.getJSON("http://schulapi.cnlpete.de/index.php?func=practice&ordered=".$ordered, function(){
               callback.call(this, data);
             });
         }

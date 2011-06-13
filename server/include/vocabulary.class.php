@@ -47,8 +47,8 @@ WHERE v.lang='de'
     if($random) {
       $sqlids = "SELECT DISTINCT (id)
 FROM `trans`
-WHERE lang = 'de'
-AND translationLanguage = 'en'
+WHERE lang = '".$lang."'
+AND translationLanguage = '".$targetLang."'
 ORDER BY RAND() LIMIT 5";
       $ids = DB::queryAssoc($sqlids);
       if ($ids == null || count($ids) == 0) {
