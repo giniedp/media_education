@@ -297,7 +297,7 @@ $.ajaxSetup({
         var inp = obj.find("input.result")[0];
         inp.disabled = true;
         var opac = obj.css("opacity") - opacDiff;
-        if(opac > 0) {
+        if(opac > 0.01) { //should fix boxes sometimes not fading out...
           obj.fadeTo("slow", opac)
         } else {
           obj.detach();
