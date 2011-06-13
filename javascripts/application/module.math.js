@@ -322,7 +322,7 @@
         math.helpTitle = undefined;
         
         math.navigationData = [{
-          name   : I18n.t("app.modules.math.back")
+          name   : I18n.t("app.modules.math.back"),
           url    : App.Controller.pathFor(["index"]),
           active : false
         },{
