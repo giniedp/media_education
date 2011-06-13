@@ -4,6 +4,7 @@ $.extend(true, I18n.dictionary, {
       modules : {
         vocabulary : {
           name : "Vokabeltrainer",
+          back : "Zurück",
           learn: "Lernen",
           test : "Vokabeltest",
           dict : "Nachschlagewerk"

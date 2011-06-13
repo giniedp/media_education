@@ -16,10 +16,21 @@
       App.Controller.pickModule(this.name);
       var current = hash.shift();
       
-      if (App.currentUser.signedIn){
-        App.Modules.login.Controller.showIndexPage();
+      //check if current is some kind of module that has stats...
+      if(current && App.currentUser.statistics[current]) {
+        //TODO show stats of current
+        if (App.currentUser.signedIn){
+          App.Modules.login.Controller.showIndexPage(current);
+        } else {
+          this.Controller.signIn();
+        }
       } else {
-        this.Controller.signIn();
+        //show index page
+        if (App.currentUser.signedIn){
+          App.Modules.login.Controller.showIndexPage();
+        } else {
+          this.Controller.signIn();
+        }
       }
     },
     View : {
@@ -38,6 +49,7 @@
     Controller : {
       getStatsPath : function(module){
         // TODO: return statistic path for module
+        return App.Controller.pathFor(["app", this.name, module]);
         return Module().pagePath();
       },
       signIn : function(){
@@ -84,7 +96,6 @@
             App.Modules.login.Controller.unsetFacebookUserData();
           }
         });
-
       },
       facebookLogout : function(){
         FB.logout(function(response) {
@@ -92,7 +103,7 @@
         });
 
       },
-      showIndexPage : function(){
+      showIndexPage : function(statsModule){
         var module = Module();
         
         var modules = _.select(App.Modules, function(item){
@@ -103,26 +114,34 @@
           return {
             name : item.displayName,
             url  : module.Controller.getStatsPath(item),
-            active : false
+            active : item.name == statsModule
           }
         });
         
-        
-        if (App.currentUser.signedIn){
-
-          module.whereAmIData = {
-            links : [{
-              name   : module.displayName,
-              url    : module.pagePath(),
-              active : false
-            },{
+        module.whereAmIData = {
+          links : [{
+            name   : module.displayName,
+            url    : module.pagePath(),
+            active : false
+          }],
+          statistics : ""
+        };
+        if (App.currentUser.signedIn) {
+          module.whereAmIData.links = module.whereAmIData.links.concat({
               name   : App.currentUser.name,
               url    : module.pagePath(),
               active : false
-            }],
-            statistics : ""
-          }
-          
+            });
+        }
+        if (statsModule) {
+          module.whereAmIData.links = module.whereAmIData.links.concat({
+              name   : App.Modules[statsModule].displayName+" - Statistik",
+              url    : module.Controller.getStatsPath(App.Modules[statsModule]),
+              active : false
+            });
+        }
+
+        if (App.currentUser.signedIn){
           $.get("modules/login/index-loggedin.html", function(data){
             App.Controller.swapContent(App.View.content, module.View.profileTemplate({
               profile : {
@@ -134,18 +153,8 @@
             App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
             App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
           });
-
-        } else {
-          
-          module.whereAmIData = {
-            links : [{
-              name   : module.displayName,
-              url    : module.pagePath(),
-              active : false
-            }],
-            statistics : ""
-          }
-          
+        }
+        else {
           $.get("modules/login/index-loggedout.html", function(data){
             App.Controller.swapContent(App.View.content, module.View.profileTemplate({
               profile : {

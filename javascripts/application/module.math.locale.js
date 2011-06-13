@@ -4,6 +4,7 @@ $.extend(true, I18n.dictionary, {
       modules : {
         math : {
           name : "Vedische Mathematik",
+          back: "Zurück",
           learn: "Lernen",
           practice : "Üben"
         }
