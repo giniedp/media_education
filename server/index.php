@@ -27,15 +27,14 @@
     case 'practice':
       $vocs = Array();
       $vocs['vocabulary'] = Array();
-      $realvocs;
       $from = $_GET['from']?$_GET['from']:'de';
-      $from = $_GET['to']?$_GET['to']:'en';
-      $ordered = $_GET['ordered'] == 1;
-      do {
-        $realvocs = Vocabulary::getVocabularies($from, $to, $ordered);
-      while (!$realvocs);
-      foreach ($realvocs as $voc) {
-        $vocs['vocabulary'][] = $voc->getData();
+      $to = $_GET['to']?$_GET['to']:'en';
+      $ordered = $_GET['ordered'] == '1';
+      $realvocs = Vocabulary::getVocabularies($from, $to, !$ordered);
+      if ($realvocs) {
+        foreach ($realvocs as $voc) {
+          $vocs['vocabulary'][] = $voc->getData();
+        }
       }
 
       echo json_encode($vocs);
