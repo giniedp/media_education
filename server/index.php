@@ -29,7 +29,7 @@
       $vocs['vocabulary'] = Array();
       $from = $_GET['from']?$_GET['from']:'de';
       $to = $_GET['to']?$_GET['to']:'en';
-      $ordered = $_GET['ordered'] == '1';
+      $ordered = $_GET['ordered'] == '1' || $_GET['ordered'] == 1;
       $realvocs = Vocabulary::getVocabularies($from, $to, !$ordered);
       if ($realvocs) {
         foreach ($realvocs as $voc) {

@@ -44,6 +44,7 @@ WHERE v.lang='de'
   }
   
   static function getVocabularies($lang, $targetLang, $random) {
+    //TODO optional limit...
     if($random) {
       $sqlids = "SELECT DISTINCT (id)
 FROM `trans`
@@ -87,7 +88,10 @@ ORDER BY RAND() LIMIT 5";
 			  $vocs[] = $lastvoc;
 			}
 		}
-  //4. return
+	//4. shuffle?
+	  if ($random)
+	    shuffle($vocs);
+  //5. return
 		return $vocs;
   }
   
