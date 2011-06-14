@@ -106,6 +106,14 @@
       },
       showIndexPage : function(statsModule){
         var module = Module();
+
+        var statsModuleName = undefined;
+        if(statsModule && typeof(statsModule) == "string"){
+          statsModuleName = statsModule;
+          statsModule = App.Modules[statsModule];
+        }
+        else if(statsModule)
+          statsModuleName = statsMod.name;
         
         var modules = _.select(App.Modules, function(item){
           return item.navigatable && App.currentUser.statistics[item.name];
@@ -115,7 +123,7 @@
           return {
             name : item.displayName,
             url  : module.Controller.getStatsPath(item),
-            active : item.name == statsModule
+            active : item.name == statsModuleName
           }
         });
         
@@ -136,8 +144,8 @@
         }
         if (statsModule) {
           module.whereAmIData.links = module.whereAmIData.links.concat({
-              name   : App.Modules[statsModule].displayName+" - Statistik",
-              url    : module.Controller.getStatsPath(App.Modules[statsModule]),
+              name   : "Statistik: " + statsModule.displayName,
+              url    : module.Controller.getStatsPath(statsModule),
               active : false
             });
         }
@@ -150,7 +158,15 @@
                 name : App.currentUser.name,
                 welcome : data
               }
-            }), function() {$("#profile #info div button").button().click(function() { App.Modules.login.Controller.facebookLogout();})});
+            }), function() {
+              $("#profile #info div button").button().click(function() { 
+                App.Modules.login.Controller.facebookLogout();
+              });
+              if (statsModule) {
+                App.View.content.prepend($('<div id="graph" style="display:none;"></div>'));
+                statsModule.plotStatistics($('#graph'));
+              }
+            });
             App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
             App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
           });
@@ -163,7 +179,15 @@
                 name : App.currentUser.name,
                 welcome : data
               }
-            }), function() {$("#profile #info div button").button().click(function() { App.Modules.login.Controller.facebookLogin();})});
+            }), function() {
+              $("#profile #info div button").button().click(function() { 
+                App.Modules.login.Controller.facebookLogin();
+              })
+              if (statsModule) {
+                App.View.content.prepend($('<div id="graph" style="display:none;"></div>'));
+                statsModule.plotStatistics($('#graph'));
+              }
+            });
             App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
             App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
           });
