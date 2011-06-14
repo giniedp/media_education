@@ -258,26 +258,38 @@ $.ajaxSetup({
           return App.Controller.pathFor(["app", this.name]);
         }
       },
+      percentageFormatter : function(v, axis) {
+        return v.toFixed(axis.tickDecimals) +"%";
+      },
       plotStatistics : function(content){
         var stats = App.currentUser.moduleStatistics(this, {allDates: true});
-        var correct = new Array(); var wrong = new Array();
+        var correct = new Array(); var wrong = new Array(); var percentage = new Array();
         var min; var max;
         _.each(stats,
             function(item, key){
-                if(!min || min > key)
-                    min = key;
-                if(!max || max < key)
-                    max = key;
                 correct.push(new Array(parseInt(key), item.correctAnswers || 0));
                 wrong.push(new Array(parseInt(key), item.wrongAnswers || 0));
+                var total = (item.wrongAnswers || 0) + (item.correctAnswers || 0);
+                percentage.push(new Array(parseInt(key), ((item.correctAnswers || 0) * 100) / total));
             });
         //TODO remove or bundle old...
         content.fadeIn('fast', function(){
           $.plot(content, 
-            [{ label: "correct", data: correct}, { label: "wrong", data: wrong} ], 
+            [{ label: "correct", data: correct}, 
+              { label: "wrong", data: wrong}, 
+              { label: "percentage", data: percentage, yaxis: 2} ], 
             { xaxis: {
                 mode: "time",
                 minTickSize: [1, "day"]},
+              yaxes: [ { min: 0 }, {
+                  // align if we are to the right
+                  alignTicksWithAxis: 1,
+                  position: 'right',
+  //                tickFormatter: App.Module.this.percentageFormatter,
+                  min: 0,
+                  max: 100
+                } ],
+
               series: {
                 lines: { show: true, fill: true, steps: false },
                 points: { show: true }
