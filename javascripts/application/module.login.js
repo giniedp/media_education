@@ -182,7 +182,7 @@
             }), function() {
               $("#profile #info div button").button().click(function() { 
                 App.Modules.login.Controller.facebookLogin();
-              })
+              });
               if (statsModule) {
                 App.View.content.prepend($('<div id="graph" style="display:none;"></div>'));
                 statsModule.plotStatistics($('#graph'));
