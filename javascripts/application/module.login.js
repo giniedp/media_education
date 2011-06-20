@@ -22,7 +22,7 @@
         if (App.currentUser.signedIn){
           App.Modules.login.Controller.showIndexPage(current);
         } else {
-          this.Controller.signIn();
+          this.Controller.signIn(current);
         }
       } else {
         //show index page
@@ -53,13 +53,13 @@
         else
           return App.Controller.pathFor(["sign_in", module.name]);
       },
-      signIn : function(){
+      signIn : function(current){
         FB.getLoginStatus(function(response) {
           if (response.session) {
             App.Modules.login.Controller.setFacebookUserData();
           } else {
    //         App.Modules.login.Controller.facebookLogin();
-            App.Modules.login.Controller.showIndexPage();
+            App.Modules.login.Controller.showIndexPage(current);
           }
         });
       },
