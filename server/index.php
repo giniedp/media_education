@@ -10,6 +10,35 @@
 
   $apicall = $_GET['func']?$_GET['func']:$_POST['func'];
   switch ($apicall) {
+    case 'getid':
+      $ident = trim($_GET['ident']?$_GET['ident']:$_POST['ident']);
+      Log::debug('ident is: '.$ident);
+      if($ident) {
+        $ids = Id::getIdsForIdents(array($ident));
+        //check if we have some id
+        if($ids && count($ids) == 1) {
+          echo json_encode($ids[0]->getHash());
+          break;
+        }
+        Log::debug('did not find id for ident: '.$ident.' trying to get a new one');
+        
+        //we need a new id for some user specified ident(fb?)
+        $id = Id::getNewId($ident);
+        if($id) {
+          echo json_encode($id->getHash());
+          break;
+        }
+        Log::debug('did not manage to get id for ident: '.$ident.' trying to get a new one without ident');
+      }
+      
+      //we need some id for some guest user
+      $id = Id::getNewId();
+      if($id) {
+        echo json_encode($id->getHash());
+        break;
+      }
+      break;
+
     case 'dictionary':
       $sim = trim($_GET['term']?$_GET['term']:$_POST['term']);
       if (strlen($sim) > 2) {
