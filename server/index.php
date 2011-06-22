@@ -38,6 +38,50 @@
         break;
       }
       break;
+      
+    case 'putstats':
+      $hash = trim($_GET['hash']?$_GET['hash']:$_POST['hash']);
+      $stats = $_POST['stats'];
+      //TODO check if stats are valid
+      $filename = "stats/".$hash.".stats";
+      if(!$hash || !$stats) {
+        Log::debug("invalid hash: '".$hash."' - stats: '".$stats."' combo");
+        echo json_encode(false);
+        break;
+      }
+      $fh = fopen($filename, "w");
+      if(!$fh) {
+        Log::debug("could not open or create file: '".$filename."'");
+        echo json_encode(false);
+        break;
+      }
+      if (!fwrite($fh, $stats)) {
+        Log::debug("Datei ".$filename." kann nicht beschrieben werden...");
+        echo json_encode(false);
+        break;
+      }
+      fclose($fh);
+
+      break;
+
+    case 'getstats':
+      $hash = trim($_GET['hash']?$_GET['hash']:$_POST['hash']);
+      $filename = "stats/".$hash.".stats";
+      if(!$hash || !file_exists($filename)) {
+        Log::debug("invalid hash: '".$hash."'");
+        echo json_encode(false);
+        break;
+      }
+      $fh = fopen($filename, "r");
+      if(!$fh) {
+        Log::debug("could not open file: '".$filename."'");
+        echo json_encode(false);
+        break;
+      }
+      $stats = fread($fh, filesize($filename));
+      fclose($fh);
+      echo $stats;
+      break;
 
     case 'dictionary':
       $sim = trim($_GET['term']?$_GET['term']:$_POST['term']);
