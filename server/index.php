@@ -61,7 +61,7 @@
         break;
       }
       fclose($fh);
-
+      echo json_encode(true);
       break;
 
     case 'getstats':
@@ -80,7 +80,7 @@
       }
       $stats = fread($fh, filesize($filename));
       fclose($fh);
-      echo $stats;
+      echo stripslashes($stats);
       break;
 
     case 'dictionary':
