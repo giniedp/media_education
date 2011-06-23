@@ -1,12 +1,12 @@
 <?php
-	require_once('inc.global.php');
-
   $debug = $_GET['debug'] == 'true';
   if(!$debug) {
     header('Cache-Control: no-cache, must-revalidate');
     header('Content-type: application/json');
     header('Access-Control-Allow-Origin: *');
   }
+
+	require_once('inc.global.php');
 
   $apicall = $_GET['func']?$_GET['func']:$_POST['func'];
   switch ($apicall) {
