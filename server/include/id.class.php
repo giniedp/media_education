@@ -36,7 +36,9 @@ class Id {
   }
 
   static function getNewId($ident) {
-    if($ident && strlen(trim($ident)) > 4)
+    if($ident == "NULL")
+      $sident = "NULL";
+    elseif($ident && strlen(trim($ident)) > 4)
       $sident = "'".trim($ident)."'";
     else
       $sident = "NULL";

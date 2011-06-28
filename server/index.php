@@ -32,7 +32,7 @@
       }
       
       //we need some id for some guest user
-      $id = Id::getNewId();
+      $id = Id::getNewId("NULL");
       if($id) {
         echo json_encode($id->getHash());
         break;
