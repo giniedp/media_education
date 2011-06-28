@@ -53,30 +53,6 @@
         else
           return App.Controller.pathFor(["sign_in", module.name]);
       },
-      loadStats : function(){
-        if(App.currentUser.hash){
-          $.ajax({
-            url: "http://schulapi.cnlpete.de/index.php?func=getstats&hash="+App.currentUser.hash,
-            dataType: 'json',
-            success: function(data){
-              App.currentUser.statistics = data;
-            }
-          });
-        }
-      },
-      saveStats : function(){
-        if(App.currentUser.hash){
-          $.ajax({
-            url: "http://schulapi.cnlpete.de/index.php?func=putstats&hash="+App.currentUser.hash,
-            dataType: 'json',
-            data: { stats: JSON.stringify(App.currentUser.statistics) },
-            type: 'POST',
-            success: function(data){
-              Log(data?"save was successful":"save was unsuccesfull");
-            }
-          });
-        }
-      },
       signIn : function(current){
         FB.getLoginStatus(function(response) {
           if (response.session) {
@@ -102,6 +78,7 @@
             type: 'POST',
             success: function(data){
               App.currentUser.hash = data;
+              App.currentUser.loadStats();
             }
           });
           callback = (callback || App.Modules.login.Controller.showIndexPage);
@@ -117,8 +94,10 @@
         App.currentUser.avatar = "stylesheets/images/guest.png"
         App.currentUser.facebookId = -1;
 
-        if($.cookie('guesthash'))
+        if($.cookie('guesthash')){
           App.currentUser.hash = $.cookie('guesthash');
+          App.currentUser.loadStats();
+        }
         else
           $.ajax({
             url: "http://schulapi.cnlpete.de/index.php?func=getid",
@@ -130,7 +109,7 @@
             }
           });
 
-        //TODO reset stats, cookies, ...
+        //TODO reset stats, cookies, ...??
         callback = (callback || App.Modules.login.Controller.showIndexPage);
         if (typeof(callback) === "function"){
           callback.call();

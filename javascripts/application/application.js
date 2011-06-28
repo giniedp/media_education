@@ -355,7 +355,32 @@ $.ajaxSetup({
     
     // add further module implementation that may not be overridden here
     //this.someFunction = function(){ ... }
-    
+    this.saveStats = function() {
+      if(App.currentUser.hash){
+        $.ajax({
+          url: "http://schulapi.cnlpete.de/index.php?func=putstats&hash="+App.currentUser.hash,
+          dataType: 'json',
+          data: { stats: JSON.stringify(App.currentUser.statistics) },
+          type: 'POST',
+          success: function(data){
+            Log(data?"save was successful":"save was unsuccesfull");
+          }
+        });
+      }
+    },
+    this.loadStats = function() {
+      if(App.currentUser.hash){
+        $.ajax({
+          url: "http://schulapi.cnlpete.de/index.php?func=getstats&hash="+App.currentUser.hash,
+          dataType: 'json',
+          success: function(data){
+            //TODO merge?
+            if(data)
+              App.currentUser.statistics = data;
+          }
+        });
+      }
+    },
     this.moduleStatistics = function(module, options){
       options = options || {};
       if (!this.statistics[module.name]){
@@ -381,4 +406,20 @@ $.ajaxSetup({
 
   App.currentUser = App.User.extend({});
   App.View.sidebar.append(App.View.moduleList);
+  //get initial hash
+  if($.cookie('guesthash')) {
+    App.currentUser.hash = $.cookie('guesthash');
+    App.currentUser.loadStats();
+  }
+  else
+    $.ajax({
+      url: "http://schulapi.cnlpete.de/index.php?func=getid",
+      dataType: 'json',
+      type: 'POST',
+      success: function(data){
+        App.currentUser.hash = data;
+        $.cookie('guesthash', data);
+      }
+    });
+
 })();

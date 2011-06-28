@@ -185,6 +185,7 @@
           $this.find(".result").animate({ "background-color" : "red" });
           stats.wrongAnswers = (stats.wrongAnswers | 0) + 1;
         }
+        App.currentUser.saveStats();
         
         var waiContent = App.View.templates.whereami(App.Modules.mathematics.whereAmIData);
         App.Controller.swapContent(App.View.info, waiContent, 0);
