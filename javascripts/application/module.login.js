@@ -1,11 +1,11 @@
 (function(){
-  
+
   Module = function(){
     return App.Modules.login;
   };
-  
-  App.Module.extend({ 
-    name          : "login", 
+
+  App.Module.extend({
+    name          : "login",
     displayName   : "Profilbereich",
     navigatable   : false,
     hasHelpPage    : false,
@@ -15,7 +15,7 @@
     evaluateHash  : function(hash, last){
       App.Controller.pickModule(this.name);
       var current = hash.shift();
-      
+
       //check if current is some kind of module that has stats...
       if(current && App.currentUser.statistics[current]) {
         //TODO show stats of current
@@ -53,6 +53,30 @@
         else
           return App.Controller.pathFor(["sign_in", module.name]);
       },
+      loadStats : function(){
+        if(App.currentUser.hash){
+          $.ajax({
+            url: "http://schulapi.cnlpete.de/index.php?func=getstats&hash="+App.currentUser.hash,
+            dataType: 'json',
+            success: function(data){
+              App.currentUser.statistics = data;
+            }
+          });
+        }
+      },
+      saveStats : function(){
+        if(App.currentUser.hash){
+          $.ajax({
+            url: "http://schulapi.cnlpete.de/index.php?func=putstats&hash="+App.currentUser.hash,
+            dataType: 'json',
+            data: { stats: JSON.stringify(App.currentUser.statistics) },
+            type: 'POST',
+            success: function(data){
+              Log(data?"save was successful":"save was unsuccesfull");
+            }
+          });
+        }
+      },
       signIn : function(current){
         FB.getLoginStatus(function(response) {
           if (response.session) {
@@ -67,14 +91,23 @@
         FB.api('/me', function(response) {
           App.currentUser.name = response.name;
           App.currentUser.signedIn = true;
-          
+
           App.currentUser.facebookId = response.id;
           App.currentUser.avatar = "https://graph.facebook.com/" + response.id + "/picture?type=large";
-          
+
+          $.ajax({
+            url: "http://schulapi.cnlpete.de/index.php?func=getid",
+            dataType: 'json',
+            data: { ident: App.currentUser.facebookId },
+            type: 'POST',
+            success: function(data){
+              App.currentUser.hash = data;
+            }
+          });
           callback = (callback || App.Modules.login.Controller.showIndexPage);
           if (typeof(callback) === "function"){
             callback.call();
-          }  
+          }
 
         });
       },
@@ -83,6 +116,20 @@
         App.currentUser.signedIn = false;
         App.currentUser.avatar = "stylesheets/images/guest.png"
         App.currentUser.facebookId = -1;
+
+        if($.cookie('guesthash'))
+          App.currentUser.hash = $.cookie('guesthash');
+        else
+          $.ajax({
+            url: "http://schulapi.cnlpete.de/index.php?func=getid",
+            dataType: 'json',
+            type: 'POST',
+            success: function(data){
+              App.currentUser.hash = data;
+              $.cookie('guesthash', data);
+            }
+          });
+
         //TODO reset stats, cookies, ...
         callback = (callback || App.Modules.login.Controller.showIndexPage);
         if (typeof(callback) === "function"){
@@ -114,11 +161,11 @@
         }
         else if(statsModule)
           statsModuleName = statsMod.name;
-        
+
         var modules = _.select(App.Modules, function(item){
           return item.navigatable && App.currentUser.statistics[item.name];
         });
-        
+
         module.navigationData = _.map(modules, function(item){
           return {
             name : item.displayName,
@@ -126,7 +173,7 @@
             active : item.name == statsModuleName
           }
         });
-        
+
         module.whereAmIData = {
           links : [{
             name   : module.displayName,
@@ -159,7 +206,7 @@
                 welcome : data
               }
             }), function() {
-              $("#profile #info div button").button().click(function() { 
+              $("#profile #info div button").button().click(function() {
                 App.Modules.login.Controller.facebookLogout();
               });
               if (statsModule) {
@@ -167,8 +214,8 @@
                 statsModule.plotStatistics($('#graph'));
               }
             });
-            App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
-            App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
+            App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));
+            App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));
           });
         }
         else {
@@ -180,7 +227,7 @@
                 welcome : data
               }
             }), function() {
-              $("#profile #info div button").button().click(function() { 
+              $("#profile #info div button").button().click(function() {
                 App.Modules.login.Controller.facebookLogin();
               });
               if (statsModule) {
@@ -188,12 +235,12 @@
                 statsModule.plotStatistics($('#graph'));
               }
             });
-            App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));  
-            App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));  
+            App.Controller.swapContent(App.View.sidebar, App.View.templates.linkList(module.navigationData));
+            App.Controller.swapContent(App.View.info, App.View.templates.whereami(module.whereAmIData));
           });
         }
       }
     }
   });
-  
+
 })();
