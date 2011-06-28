@@ -106,6 +106,7 @@
             success: function(data){
               App.currentUser.hash = data;
               $.cookie('guesthash', data);
+              App.currentUser.loadStats();
             }
           });
 

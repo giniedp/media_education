@@ -377,6 +377,8 @@ $.ajaxSetup({
             //TODO merge?
             if(data)
               App.currentUser.statistics = data;
+            else
+              App.currentUser.statistics = {};
           }
         });
       }
