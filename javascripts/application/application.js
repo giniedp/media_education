@@ -420,7 +420,7 @@ $.ajaxSetup({
       type: 'POST',
       success: function(data){
         App.currentUser.hash = data;
-        $.cookie('guesthash', data);
+        $.cookie('guesthash', data, { expires: 31 });
       }
     });
 
