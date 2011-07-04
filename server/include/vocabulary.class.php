@@ -35,9 +35,10 @@ WHERE v.lang='de'
     $this->translationRegexs[] = $translationRegex;
   }
   
-  function addTranslation($translation) {
+  function addTranslation($translation, $translationRegex) {
     //TODO if not_in
     $this->translations[] = $translation;
+    $this->translationRegexs[] = $translationRegex;
   }
   
   function getData() {
