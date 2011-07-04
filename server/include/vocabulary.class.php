@@ -19,16 +19,20 @@ WHERE v.lang='de'
   private $id;
   private $language;
   private $word;
+  private $regex;
   private $translations;
   private $translationLanguage;
+  private $translationRegex;
 
-  function Vocabulary($id, $language, $word, $translation, $translationLanguage) {
+  function Vocabulary($id, $language, $word, $regex, $translation, $translationLanguage, $translationRegex) {
     $this->id = $id;
     $this->language = $language;
     $this->word = $word;
+    $this->regex = $regex;
     $this->translations = Array();
     $this->translations[] = $translation;
     $this->translationLanguage = $translationLanguage;
+    $this->translationRegexs[] = $translationRegex;
   }
   
   function addTranslation($translation) {
@@ -38,9 +42,11 @@ WHERE v.lang='de'
   
   function getData() {
     return array('origin' => $this->word, 
+      'regex' => $this->regex, 
       'language' => $this->language, 
       'translations' => $this->translations,
-      'translationLanguage' => $this->translationLanguage);
+      'translationLanguage' => $this->translationLanguage,
+      'translationRegexes' => $this->translationRegexs);
   }
   
   static function getVocabularies($lang, $targetLang, $random) {
@@ -81,9 +87,9 @@ ORDER BY RAND() LIMIT 5";
 		$lastvoc = NULL;
 		foreach ($vocsarray as $voc) {
 		  if ($lastvocid == $voc['id'])
-		    $lastvoc->addTranslation($voc['translation']);
+		    $lastvoc->addTranslation($voc['translation'], $voc['translationRegex']);
 		  else {
-		    $lastvoc = new Vocabulary($voc['id'], $lang, $voc['origin'], $voc['translation'], $targetLang);
+		    $lastvoc = new Vocabulary($voc['id'], $lang, $voc['origin'], $voc['regex'], $voc['translation'], $targetLang, $voc['translationRegex']);
 		    $lastvocid = $voc['id'];
 			  $vocs[] = $lastvoc;
 			}
@@ -97,12 +103,12 @@ ORDER BY RAND() LIMIT 5";
   
   static function createView() {
     $sql = "CREATE VIEW `trans` AS 
-select `v`.`id` AS `id`,`v`.`voc` AS `origin`,`v`.`lang` AS `lang`,`vv`.`voc` AS `translation`,`vv`.`lang` AS `translationLanguage` 
+select `v`.`id` AS `id`,`v`.`voc` AS `origin`,`v`.`regex` AS `regex`,`v`.`lang` AS `lang`,`vv`.`voc` AS `translation`,`vv`.`lang` AS `translationLanguage`,`vv`.`regex` AS `translationRegex` 
 from ((`vocabulary` `v` 
 join `translations` `t` on((`t`.`origin` = `v`.`id`))) 
 join `vocabulary` `vv` on((`vv`.`id` = `t`.`translation`))) 
 union 
-select `v`.`id` AS `id`,`v`.`voc` AS `origin`,`v`.`lang` AS `lang`,`vv`.`voc` AS `translation`,`vv`.`lang` AS `translationLanguage` 
+select `v`.`id` AS `id`,`v`.`voc` AS `origin`,`v`.`regex` AS `regex`,`v`.`lang` AS `lang`,`vv`.`voc` AS `translation`,`vv`.`lang` AS `translationLanguage`,`vv`.`regex` AS `translationRegex` 
 from ((`vocabulary` `v` 
 join `translations` `t` on((`t`.`translation` = `v`.`id`))) 
 join `vocabulary` `vv` on((`vv`.`id` = `t`.`origin`))) 
@@ -137,7 +143,7 @@ order by `origin`;";
 		  if ($lastvocid == $voc['id'])
 		    $lastvoc->addTranslation($voc['translation']);
 		  else {
-		    $lastvoc = new Vocabulary($voc['id'], $voc['language'], $voc['origin'], $voc['translation'], $voc['translationLanguage']);
+		    $lastvoc = new Vocabulary($voc['id'], $voc['language'], $voc['origin'], $voc['regex'], $voc['translation'], $voc['translationLanguage'], $voc['translationRegex']);
 		    $lastvocid = $voc['id'];
 			  $vocs[] = $lastvoc;
 			}
