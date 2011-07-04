@@ -142,7 +142,7 @@ order by `origin`;";
 		$lastvoc = NULL;
 		foreach ($vocsarray as $voc) {
 		  if ($lastvocid == $voc['id'])
-		    $lastvoc->addTranslation($voc['translation']);
+		    $lastvoc->addTranslation($voc['translation'], $voc['translationRegex']);
 		  else {
 		    $lastvoc = new Vocabulary($voc['id'], $voc['lang'], $voc['origin'], $voc['regex'], $voc['translation'], $voc['translationLanguage'], $voc['translationRegex']);
 		    $lastvocid = $voc['id'];
