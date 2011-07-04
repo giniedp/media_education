@@ -24,7 +24,6 @@ Das Seitenlayout definiert folgende 6 Bereiche:
   \item[Inhaltsbereich] Inhalte jeder Unterseite werden hier angezeigt.
   \item[Schnellnavi] Die Schnellnavigation ermöglicht einen Schnellzugriff auf wichtige Bereiche der Anwendung. Die Navigationsknöpfe sind durch Symbole (Icons) repräsentiert. Die Navigationsleiste ist rechts ausgerichtet. Folgende Knöpfe sind immer zu sehen:
   \begin{description}
-    \item[Modulseite] \texttt{layout/module-page-icon.png} Führt zur Hauptseite des aktuellen Moduls. 
     \item[Hauptseite] \texttt{layout/main-page-icon.png} Führt immer zur Hauptseite. 
     \item[Login/Profil] \texttt{layout/login-icon.png} bzw. \texttt{layout/profile-icon.png} Führen zur Login- bzw. zur Profilseite. 
     \item[Hilfe] \texttt{layout/help-icon.png} Öffnet ein Overlay mit Hilfe zur aktuellen Seite. 
@@ -48,7 +47,7 @@ Die Hauptseite zeigt folgende Inhalte:
 \begin{description}
   \item[Textbereich] \texttt{layout/index.html} Willkommens- und Beschreibungstext der Anwendung. Der Besucher bzw. der Benutzer wird über die Ziele der Anwendung informiert und erhält Anweisungen zum weiteren Vorgehen.
   \item[Wo bin ich] Es erscheinen folgende Zeilen \emph{\\Du bist hier \\Hauptseite}
-  \item[Navigation] Zeigt die fünf zuletzt verwendeten Module als einzelne Links an. Alle Module sind zusätzlich über ein Dropdownmenü erreichbar.
+  \item[Navigation] Zeigt die fünf zuletzt verwendeten Module als einzelne Links an. Alle übrigen Module sind zusätzlich über ein Dropdownmenü erreichbar.
 	
 \end{description}
 
@@ -62,7 +61,7 @@ Die Hauptseite zeigt folgende Inhalte:
 \label{sec:profile-page}
 
 \begin{description}
-  \item[Facebookbereich] Optionen zur Facebookverknüpfung. Diese sind bisher undefiniert.
+  \item[Profilbereich] Optionen zur Accountverknüpfung (z.B. Facebook, Twitter oder ähnliche) oder Profildaten
   \item[Statistikbereich] Zeigt die ausgewählte Statistik an. Statistiken sind im Drehbuch der einzelnen Module definiert.
   \item[Wo bin ich] \emph{\\Du bist hier:\\Profilbereich\\<Benutzername>}
   \item[Navigationsbereich] Zeigt die fünf letzten Module, die eine Statistik über den Benutzer erfasst haben, als einzelne Links an. 
@@ -88,7 +87,7 @@ Die Hauptseite zeigt folgende Inhalte:
       \item etc.
     \end{itemize}
   \item[Wo bin ich] 
-    \emph{\\Du bist hier:\\Profilbereich\\<Benutzername>}
+    \emph{\\Du bist hier:\\<Modulname>}
   \item[Navigationsbereich] Enthält folgende Navigationsknöpfe
    \begin{description}
     \item[Lernen] Verlinkt auf den Lernbereich des Moduls.
