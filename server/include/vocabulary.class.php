@@ -143,7 +143,7 @@ order by `origin`;";
 		  if ($lastvocid == $voc['id'])
 		    $lastvoc->addTranslation($voc['translation']);
 		  else {
-		    $lastvoc = new Vocabulary($voc['id'], $voc['language'], $voc['origin'], $voc['regex'], $voc['translation'], $voc['translationLanguage'], $voc['translationRegex']);
+		    $lastvoc = new Vocabulary($voc['id'], $voc['lang'], $voc['origin'], $voc['regex'], $voc['translation'], $voc['translationLanguage'], $voc['translationRegex']);
 		    $lastvocid = $voc['id'];
 			  $vocs[] = $lastvoc;
 			}
