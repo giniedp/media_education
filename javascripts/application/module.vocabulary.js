@@ -120,6 +120,14 @@
 
         var result = false;
         for(var i=0; i < App.Modules.vocabulary.vocData[id].translations.length; i++) {
+          var reg = App.Modules.vocabulary.vocData[id].translationRegexes[i];
+          if(reg && reg != "null") {
+            var regex = new RegExp("^"+reg+"$","i"); //i is case insensitive
+            if(regex.test(userResult)){
+              result = true;
+              break;
+            }
+          }
           if(App.Modules.vocabulary.vocData[id].translations[i].toLowerCase() === userResult.toLowerCase()) {
             result = true;
             break;
