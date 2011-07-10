@@ -231,6 +231,35 @@ body {
       -webkit-box-shadow: 3px 3px 4px #050505 inset;
       box-shadow: 3px 3px 4px #050505 inset; }
 
+#dictionary #dict {
+  font-size: 30px;
+  padding: 5px;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border: 3px solid white;
+  background: #ffc601;
+  -moz-box-shadow: 3px 3px 4px #050505 inset;
+  -webkit-box-shadow: 3px 3px 4px #050505 inset;
+  box-shadow: 3px 3px 4px #050505 inset; }
+#dictionary #autotarget .vocabulary-card {
+  min-width: 200px;
+  background: url("images/ruled.png");
+  padding: 0 0 15px 30px;
+  -moz-box-shadow: 3px 3px 4px #050505;
+  -webkit-box-shadow: 3px 3px 4px #050505;
+  box-shadow: 3px 3px 4px #050505;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px; }
+  #dictionary #autotarget .vocabulary-card h3 {
+    margin-bottom: 10px;
+    color: #050505;
+    border-bottom: 1px solid #050505; }
+  #dictionary #autotarget .vocabulary-card ul {
+    margin-top: 0;
+    color: #050505; }
+
 #graph {
   width: 450px;
   height: 200px;

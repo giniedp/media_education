@@ -167,7 +167,7 @@
                 return data;
               },
               select: function( event, ui ) {
-                var temp = _.template('<h3><%= ui.item.origin %></h3><p><% _.each(ui.item.translations, function(item) { %> <%= item %><br /><% }); %></p>', { ui : ui });
+                var temp = _.template('<div class="vocabulary-card"><h3><%= ui.item.origin %></h3><ul><% _.each(ui.item.translations, function(item) { %><li><%= item %></li><% }); %></ul></div>', { ui : ui });
                 App.Controller.swapContent($('#autotarget'), temp);
               }
             });
