@@ -183,6 +183,9 @@
           stats.correctAnswers = (stats.correctAnswers | 0) + 1;
         } else {
           $this.find(".result").animate({ "background-color" : "red" });
+          container.attr('title', 'Richtig wäre: '+result);
+          container.find("*[title]").tipTip({});
+
           stats.wrongAnswers = (stats.wrongAnswers | 0) + 1;
         }
         App.currentUser.saveStats();

@@ -141,6 +141,13 @@
           stats.correctAnswers = (stats.correctAnswers | 0) + 1;
         } else {
           input.animate({ "background-color" : "red" });
+          if(App.Modules.vocabulary.vocData[id].translations.length > 1)
+            container.attr('title', 'Richtig wäre zum Beispiel: '+
+              App.Modules.vocabulary.vocData[id].translations[
+                parseInt( Math.random() * (App.Modules.vocabulary.vocData[id].translations.length-1))]);
+          else
+            container.attr('title', 'Richtig wäre: '+App.Modules.vocabulary.vocData[id].translations[0]);
+          container.find("*[title]").tipTip({});
           stats.wrongAnswers = (stats.wrongAnswers | 0) + 1;
         }
         App.currentUser.saveStats();
