@@ -258,43 +258,58 @@ $.ajaxSetup({
           return App.Controller.pathFor(["app", this.name]);
         }
       },
-      percentageFormatter : function(v, axis) {
-        return v.toFixed(axis.tickDecimals) +"%";
-      },
       plotStatistics : function(content){
         var stats = App.currentUser.moduleStatistics(this, {allDates: true});
         var correct = new Array(); var wrong = new Array(); var percentage = new Array();
         var min; var max;
         _.each(stats,
             function(item, key){
+              if((item.correctAnswers || 0) > 0 || (item.wrongAnswers || 0) > 0) {
                 correct.push(new Array(parseInt(key), item.correctAnswers || 0));
                 wrong.push(new Array(parseInt(key), item.wrongAnswers || 0));
                 var total = (item.wrongAnswers || 0) + (item.correctAnswers || 0);
                 percentage.push(new Array(parseInt(key), ((item.correctAnswers || 0) * 100) / total));
+              }
             });
         //TODO remove or bundle old...
         content.fadeIn('fast', function(){
           $.plot(content, 
-            [{ label: "correct", data: correct}, 
-              { label: "wrong", data: wrong}, 
-              { label: "percentage", data: percentage, yaxis: 2} ], 
+            [{ label: "# richtige Antworten", data: correct}, 
+              { label: "# falsche Antworten", data: wrong}, 
+              { label: "Prozentual Richtig", data: percentage, yaxis: 2} ], 
             { xaxis: {
                 mode: "time",
-                minTickSize: [1, "day"]},
-              yaxes: [ { min: 0 }, {
+                minTickSize: [1, "day"],
+          //      transform: function (v) { return Math.log(v); },
+          //      inverseTransform: function (v) { return Math.exp(v); },
+                monthNames: ["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
+              },
+              yaxes: [ 
+                { min: 0,
+                  minTickSize: 1,
+                  tickDecimals: 0
+                }, {
                   // align if we are to the right
                   alignTicksWithAxis: 1,
                   position: 'right',
-  //                tickFormatter: App.Module.this.percentageFormatter,
+                  tickFormatter: function (val, axis) { return val.toFixed(axis.tickDecimals)+"%"; },
                   min: 0,
                   max: 100
                 } ],
-
+              legend: {
+                position: "nw"
+              },
               series: {
                 lines: { show: true, fill: true, steps: false },
                 points: { show: true }
               }
-            });});
+            });
+            // left collegeblock background container must be stretched
+            // to the full height of the content page. Can not solve it with css onl
+            $("#left").css({
+              height : Math.max($("#middle").innerHeight(), $("#right").innerHeight()) 
+            });
+          });
       }
       // Add further module implementations that may be overridden with options here
     }, options);
